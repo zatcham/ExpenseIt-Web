@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Auth;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ class LoginController extends AbstractController
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
-        return $this->render('login/login.html.twig', [
+        return $this->render('auth/login.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
         ]);
@@ -23,6 +23,6 @@ class LoginController extends AbstractController
 
     #[Route('/logout', name: 'app_logout', methods: ['GET'])]
     public function logout(): never {
-        throw new \Exception('');
+        throw new \Exception('Error logging out');
     }
 }

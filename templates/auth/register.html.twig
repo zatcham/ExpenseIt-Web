@@ -1,0 +1,59 @@
+{% extends 'auth/base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="d-flex align-items-center justify-content-center container-sec">
+            <div class="wrapper container-fluid border rounded px-5" style="background-color: #f5f5f5;">
+                {% for flash_error in app.flashes('verify_email_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+
+                <span class="title pb-3">
+                    <img src="../assets/calid_logo_small.png" alt="ExpenseIt Logo">
+                </span>
+                <span class="title pb-3">
+                    Register
+                </span>
+
+                {{ form_errors(registrationForm) }}
+
+                {{ form_start(registrationForm, {'attr': {'class': 'login-form validate-form'}}) }}
+                <div class="wrapper-input validate-input" data-validate="Example: john@doe.com">
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'input pass-font'}}) }}
+                    <span class="focus-input" data-placeholder="Email"></span>
+                </div>
+
+                <div class="wrapper-input validate-input" data-validate="Enter password">
+                        <span class="show-pw">
+                            <i class="fa fa-eye" id="show-pass"></i>
+                        </span>
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input pass-font'}}) }}
+                    <span class="focus-input" data-placeholder="Password"></span>
+                </div>
+
+{#                <div class="wrapper-input validate-input" data-validate="Confirm password" style="margin-bottom: 0px; !important">#}
+{#                    {{ form_row(registrationForm.confirmPassword, {'attr': {'class': 'input pass-font'}}) }}#}
+{#                    <span class="focus-input" data-placeholder="Confirm Password"></span>#}
+{#                </div>#}
+
+                <div class="wrapper-input validate-input" data-validate="Agree to terms">
+                    {{ form_widget(registrationForm.agreeTerms) }}
+                </div>
+
+                <div class="container-btn mt-3">
+                    <div class="wrap-btn">
+                        <div class="bg-btn"></div>
+                        <button type="submit" class="form-btn">
+                            Register
+                        </button>
+                    </div>
+                </div>
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
