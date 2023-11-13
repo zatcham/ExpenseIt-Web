@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="css/auth.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/auth.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 
@@ -17,13 +17,13 @@
     {% block content %}
     {% endblock %}
     <script type="module">
-        import { Gradient } from './js/Gradient.js'
+        import { Gradient } from './{{ asset('js/Gradient.js') }}'
         const gradient = new Gradient()
         gradient.initGradient('#gradient-canvas')
     </script>
     <script>
         var button = document.querySelector("#show-pass");
-        var textarea = document.querySelector("#pass");
+        var textarea = document.querySelector("#password");
 
         button.addEventListener("click", function () {
             const type = textarea.getAttribute("type") === "password" ? "text" : "password";

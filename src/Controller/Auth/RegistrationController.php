@@ -49,12 +49,12 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('expenseit@zmit.co.uk', 'ExpenseIt'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('emails/confirmation_email.html.twig')
+                    ->subject('Please verify your email')
+                    ->htmlTemplate('emails/verify_email.html.twig')
             );
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_home_number');
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('auth/register.html.twig', [

@@ -1,1 +1,88 @@
-{# todo #}
+{% extends 'auth/base.html.twig' %}
+
+{% block title %}Two Factor{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div class="d-flex align-items-center justify-content-center container-sec">
+        <div class="wrapper container-fluid">
+            <form class="login-form validate-form" action="{{ path('app_tfa') }}" method="POST">
+                <span class="title pb-3">
+                        <!--<i class="zmdi zmdi-font"></i>-->
+                    <img src="../assets/logo_small.png" alt="ExpenseIt Logo">
+                </span>
+                <span class="title pb-3">2FA</span>
+
+{#                {% if error %}#}
+{#                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+{#                {% endif %}#}
+                <hr/>
+                <form id="2fa-form" name="2fa-form" action="" method="post" class="mt-1">
+                    <label class="my-2">Please enter the code sent to you: </label>
+                    <div class="digit-group" data-group-name="digits" data-autosubmit="true" autocomplete="off">
+                        <input type="number" id="digit-1" name="digit-1" data-next="digit-2" autofocus/>
+                        <input type="number" id="digit-2" name="digit-2" data-next="digit-3" data-previous="digit-1" />
+                        <input type="number" id="digit-3" name="digit-3" data-next="digit-4" data-previous="digit-2" />
+                        <span class="splitter">&ndash;</span>
+                        <input type="number" id="digit-4" name="digit-4" data-next="digit-5" data-previous="digit-3" />
+                        <input type="number" id="digit-5" name="digit-5" data-next="digit-6" data-previous="digit-4" />
+                        <input type="number" id="digit-6" name="digit-6" data-previous="digit-5" />
+                    </div>
+                    <br>
+                    <input type="hidden" id="2fa-verify" name="2fa-verify">
+                    <!--        <input type="submit" class="btn btn-primary my-1" value="Verify">-->
+                </form>
+        </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        // Handles movement between inputs
+        // Get every digit in group
+        $('.digit-group').find('input').each(function () {
+            $(this).attr('maxlength', 1);
+            // When keyup event
+            $(this).on('keyup', function (e) {
+                var parent = $($(this).parent());
+                // Get previous if backspace or left arrow
+                if (e.keyCode === 8 || e.keyCode === 37) {
+                    var prev = parent.find('input#' + $(this).data('previous'));
+                    if (prev.length) {
+                        $(prev).select();
+                    }
+                    // Otherwise, if 0-9, a-z, A-Z, or right arrow entered, go right
+                } else if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 96 && e.keyCode <= 105) || e.keyCode === 39) {
+                    var next = parent.find('input#' + $(this).data('next'));
+                    if (next.length) {
+                        $(next).select();
+                    } else {
+                        if (parent.data('autosubmit')) {
+                            // document.forms["2fa_form"].submit();
+                            document.getElementById('2fa-form').submit();
+                        }
+                    }
+                }
+            });
+        });
+        // Concatenate input to digit fields into one.
+        $(function() {
+            $('#digit-1, #digit-2, #digit-3, #digit-4, #digit-5, #digit-6').on('input', function() {
+                $('#2fa-verify').val(
+                    $('#digit-1, #digit-2, #digit-3, #digit-4, #digit-5, #digit-6').map(function() {
+                        return $(this).val();
+                    }).get().join('')
+                );
+            });
+        });
+        // Resend 2fa
+        function resend2FA() {
+            var ajaxurl = 'index.php',
+                data =  {'resend': "True"};
+            $.post(ajaxurl, data, function (response) {
+                // Do nothing
+            });
+        }
+    </script>
+{% endblock %}

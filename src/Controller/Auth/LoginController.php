@@ -12,6 +12,8 @@ class LoginController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
+
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_ANONYMOUSLY');
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
