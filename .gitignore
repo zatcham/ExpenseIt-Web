@@ -2,6 +2,7 @@
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
+/.env.local.php.dis
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
@@ -19,7 +20,10 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
-.env.e
+.env
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+### PHPStorm edits
+.idea
