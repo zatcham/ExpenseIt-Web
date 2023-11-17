@@ -9,12 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController {
 
     #[Route('/home', name: 'app_home')]
-    public function number(): Response {
+    public function index(): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-        $num = random_int(0, 100);
 
         return $this->render('dashboard/home.html.twig', [
-            'number' => $num,
+            'number' => '1',
         ]);
     }
 
