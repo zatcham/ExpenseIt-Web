@@ -44,3 +44,10 @@ MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
 MAILER_DSN=mailgun://68c02eb2d821eb1560b55d4851ae93ae-8c9e82ec-cb1da23c:mg.zmit.co.uk@default?region=eu
 # MAILER_DSN=mailgun+smtp://USERNAME:PASSWORD@default?region=us
 ###< symfony/mailgun-mailer ###
+
+### For JWT API Auth
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=12224b234fadfa6d93d6e36456fbab65be8d3e31d62a526a0f824cd2f99e9fd9
+###< lexik/jwt-authentication-bundle ###
