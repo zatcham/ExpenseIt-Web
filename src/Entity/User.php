@@ -37,9 +37,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reciept::class)]
-    private Collection $reciepts;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
@@ -64,10 +61,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Companies $company = null;
+
 
     public function __construct()
     {
-        $this->reciepts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -152,35 +151,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Reciept>
-     */
-    public function getReciepts(): Collection
-    {
-        return $this->reciepts;
-    }
-
-    public function addReciept(Reciept $reciept): static
-    {
-        if (!$this->reciepts->contains($reciept)) {
-            $this->reciepts->add($reciept);
-            $reciept->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReciept(Reciept $reciept): static
-    {
-        if ($this->reciepts->removeElement($reciept)) {
-            // set the owning side to null (unless already changed)
-            if ($reciept->getUser() === $this) {
-                $reciept->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getFirstname(): ?string
     {
@@ -235,8 +205,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->imageFile = $imageFile;
 
         if (null !== $imageFile) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
             $this->updatedAt = new \DateTimeImmutable();
         }
     }
@@ -264,6 +232,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getImageSize(): ?int
     {
         return $this->imageSize;
+    }
+
+    public function getCompany(): ?Companies
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Companies $company): static
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function getCompanyName() : string {
+        return $this->company->getName();
     }
 }
 
