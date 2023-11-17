@@ -64,6 +64,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Companies $company = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fullname = null;
+
 
     public function __construct()
     {
@@ -248,6 +251,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getCompanyName() : string {
         return $this->company->getName();
+    }
+
+    public function getFullname(): ?string
+    {
+        return $this->fullname;
+    }
+
+    public function setFullname(?string $fullname): static
+    {
+        $this->fullname = $fullname;
+
+        return $this;
     }
 }
 
