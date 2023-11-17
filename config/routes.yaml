@@ -7,6 +7,9 @@ controllers:
 api_login_check:
     path: /api/login_check
 
+api_refresh_token:
+    path: /api/token/refresh
+
 index:
     path: /
     controller: App\Controller\HomeController::index
