@@ -37,9 +37,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reciept::class)]
-    private Collection $reciepts;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $firstname = null;
 
@@ -70,7 +67,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->reciepts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,35 +151,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Reciept>
-     */
-    public function getReciepts(): Collection
-    {
-        return $this->reciepts;
-    }
-
-    public function addReciept(Reciept $reciept): static
-    {
-        if (!$this->reciepts->contains($reciept)) {
-            $this->reciepts->add($reciept);
-            $reciept->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReciept(Reciept $reciept): static
-    {
-        if ($this->reciepts->removeElement($reciept)) {
-            // set the owning side to null (unless already changed)
-            if ($reciept->getUser() === $this) {
-                $reciept->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getFirstname(): ?string
     {
