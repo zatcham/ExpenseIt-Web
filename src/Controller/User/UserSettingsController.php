@@ -47,6 +47,11 @@ class UserSettingsController extends AbstractController
         ]);
     }
 
+    #[Route('/user/security', name:'user_security')]
+    public function editUserSecurity(Request $request) : Response {
+        return $this->render('dashboard/user_settings/edit_security.html.twig', []);
+    }
+
     private function handleImageUpload(User $user): void { // TODO: Blocked
         $image = $user->getImageFile();
 
