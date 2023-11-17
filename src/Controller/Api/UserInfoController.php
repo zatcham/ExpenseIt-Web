@@ -17,6 +17,7 @@ class UserInfoController extends AbstractController
             'roles' => $user->getRoles(),
             'first_name' => $user->getFirstName(),
             'last_name' => $user->getLastName(),
+            'company_name' => $user->getCompanyName(),
             'job_title' => $user->getJobTitle(),
             'mobile_number' => $user->getMobileNumber(),
         ]);
