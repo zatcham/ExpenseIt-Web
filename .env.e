@@ -15,7 +15,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-environment-variables-for-infrastructure-configuration
 
 ###> symfony/framework-bundle ###
-APP_ENV=prod
+APP_ENV=dev
 APP_SECRET=ff594cbdd004395787d6921fe9669228
 ###< symfony/framework-bundle ###
 
@@ -25,8 +25,8 @@ APP_SECRET=ff594cbdd004395787d6921fe9669228
 #
 # DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
 # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4"
- #DATABASE_URL="mysql://root:@127.0.0.1:3306/expense_app?serverVersion=10.4.27-MariaDB&charset=utf8mb4"
-DATABASE_URL="postgresql://vatghlqzfxgwui:446adc2f32dcf107df8baa0e5634ef4358d21165e96dbce29c8d75820d7de620@ec2-52-215-68-14.eu-west-1.compute.amazonaws.com:5432/df30g822jt7grc?serverVersion=15.5&charset=utf8"
+ DATABASE_URL="mysql://root:@127.0.0.1:3306/expense_app_test?serverVersion=10.4.27-MariaDB&charset=utf8mb4"
+#DATABASE_URL="postgresql://vatghlqzfxgwui:446adc2f32dcf107df8baa0e5634ef4358d21165e96dbce29c8d75820d7de620@ec2-52-215-68-14.eu-west-1.compute.amazonaws.com:5432/df30g822jt7grc?serverVersion=15.5&charset=utf8"
 ###< doctrine/doctrine-bundle ###
 
 ###> symfony/messenger ###
@@ -44,3 +44,9 @@ MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
 MAILER_DSN=mailgun://68c02eb2d821eb1560b55d4851ae93ae-8c9e82ec-cb1da23c:mg.zmit.co.uk@default?region=eu
 # MAILER_DSN=mailgun+smtp://USERNAME:PASSWORD@default?region=us
 ###< symfony/mailgun-mailer ###
+
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=12224b234fadfa6d93d6e36456fbab65be8d3e31d62a526a0f824cd2f99e9fd9
+###< lexik/jwt-authentication-bundle ###
