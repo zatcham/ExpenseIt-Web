@@ -253,7 +253,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function getCompanyName() : string {
-        return $this->company->getName();
+        if ($this->company !== null) {
+            return $this->company->getName();
+        }
+        return ('No company assigned');
     }
 
     public function getFullname(): ?string
