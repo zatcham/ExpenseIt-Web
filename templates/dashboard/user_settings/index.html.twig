@@ -180,7 +180,7 @@
                             <h6 class="mb-0">Security</h6>
                         </div>
                         <div class="col-md-4 text-end">
-                            <a href="{{ path('user_edit') }}">
+                            <a href="{{ path('user_security') }}">
                                 <i class="fas fa-user-edit text-secondary text-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Security"></i>
                             </a>
                         </div>
@@ -193,10 +193,10 @@
                             ●●●●●●●●
                         </li>
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">2FA Status:</strong> &nbsp;
-                            Not enabled (it doesn;t exist yet)
+                            {% if app.user.googleAuthenticatorEnabled %}Enabled% else %}Not enabled{% endif %}
                         </li>
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">2FA Type</strong>
-                            &nbsp;Still doesnt exist
+                            {% if app.user.googleAuthenticatorEnabled %}Google{% endif %}
                         </li>
 {#                        <li class="list-group-item border-0 d-flex align-items-center px-0 mb-2">#}
 {#                            <div class="avatar me-3">#}

@@ -3,16 +3,22 @@
 namespace App\Controller\User;
 
 use App\Form\UserEditType;
+use App\Form\UserSecurityEditType;
 use Doctrine\ORM\EntityManagerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 class UserSettingsController extends AbstractController
 {
+//    private $googleAuthenticator;
+
+//    private function __construct(GoogleAuthenticator $googleAuthenticator) {
+//        $this->googleAuthenticator = $googleAuthenticator;
+//    }
+
     #[Route('/user/settings', name: 'app_user_settings')]
     public function index(Request $request): Response
     {
@@ -48,8 +54,26 @@ class UserSettingsController extends AbstractController
     }
 
     #[Route('/user/security', name:'user_security')]
-    public function editUserSecurity(Request $request) : Response {
-        return $this->render('dashboard/user_settings/edit_security.html.twig', []);
+    public function editUserSecurity(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager) : Response {
+        $user = $this->getUser();
+        $form = $this->createForm(UserSecurityEditType::class);
+        $form->handleRequest($request);
+//        $qrCodeUrl = $this->googleAuthenticator->getUrl($user);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('password')->getData() != "") {
+                $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $this->addFlash('success', 'Changed password successfully');
+            } else {
+                $this->addFlash('success', 'Nothing was changed');
+            }
+        }
+        return $this->render('dashboard/user_settings/edit_security.html.twig', [
+            'securityForm' => $form,
+        ]);
     }
 
     private function handleImageUpload(User $user): void { // TODO: Blocked
