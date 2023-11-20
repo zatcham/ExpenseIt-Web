@@ -5,13 +5,12 @@ namespace App\Controller\User;
 use App\Form\UserEditType;
 use App\Form\UserSecurityEditType;
 use Doctrine\ORM\EntityManagerInterface;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticator;
-
 class UserSettingsController extends AbstractController
 {
 //    private $googleAuthenticator;
@@ -63,17 +62,17 @@ class UserSettingsController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $this->addFlash('success', 'Changed password successfully');
-        } else {
-            $this->addFlash('success', 'Nothing changed');
+            if ($form->get('password')->getData() != "") {
+                $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $this->addFlash('success', 'Changed password successfully');
+            } else {
+                $this->addFlash('success', 'Nothing was changed');
+            }
         }
-
         return $this->render('dashboard/user_settings/edit_security.html.twig', [
-            'securityForm' => $form
+            'securityForm' => $form,
         ]);
     }
 
