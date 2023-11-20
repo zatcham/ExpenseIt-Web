@@ -19,7 +19,22 @@
 
                 {{ form_errors(registrationForm) }}
 
-                {{ form_start(registrationForm, {'attr': {'class': 'login-form validate-form'}}) }}
+                {{ form_start(registrationForm, {'attr': {'class': 'login-form validate-form pt-1'}}) }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="wrapper-input" data-validate="John">
+                            {{ form_widget(registrationForm.firstname, {'attr': {'class': 'input pass-font'}}) }}
+                            <span class="focus-input" data-placeholder="First Name"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="wrapper-input" data-validate="Doe">
+                            {{ form_widget(registrationForm.lastname, {'attr': {'class': 'input pass-font'}}) }}
+                            <span class="focus-input" data-placeholder="Last Name"></span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="wrapper-input validate-input" data-validate="Example: john@doe.com">
                     {{ form_widget(registrationForm.email, {'attr': {'class': 'input pass-font'}}) }}
                     <span class="focus-input" data-placeholder="Email"></span>
@@ -29,9 +44,9 @@
                         <span class="show-pw">
                             <i class="fa fa-eye" id="show-pass"></i>
                         </span>
-                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input pass-font'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input pass-font'} , 'id': 'password'}) }}
                     <span class="focus-input" data-placeholder="Password"></span>
-                </div>
+                </div> {# TODO : Add confirm pass? #}
 
 {#                <div class="wrapper-input validate-input" data-validate="Confirm password" style="margin-bottom: 0px; !important">#}
 {#                    {{ form_row(registrationForm.confirmPassword, {'attr': {'class': 'input pass-font'}}) }}#}
@@ -40,6 +55,7 @@
 
                 <div class="wrapper-input validate-input" data-validate="Agree to terms">
                     {{ form_widget(registrationForm.agreeTerms) }}
+                    <span class="focus-input" data-placeholder="Accept our T&Cs?"></span>
                 </div>
 
                 <div class="container-btn mt-3">
