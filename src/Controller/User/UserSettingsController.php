@@ -33,6 +33,11 @@ class UserSettingsController extends AbstractController
         $form = $this->createForm(UserEditType::class);
         $form->handleRequest($request);
 
+        $form->get('firstname')->setData($user->getFirstName());
+        $form->get('lastname')->setData($user->getLastName());
+        $form->get('mobile_number')->setData($user->getMobileNumber());
+        $form->get('email')->setData($user->getEmail());
+
         if ($form->isSubmitted() && $form->isValid()) {
             // TODO : Show current data on form before edit
             // TODO : Check if box is filled / set inputs to non required

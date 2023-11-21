@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Scheb\TwoFactorBundle\Model\Google\TwoFactorInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -213,7 +214,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     {
         $this->imageFile = $imageFile;
 
-        if (null !== $imageFile) {
+//        if (null !== $imageFile) {
+//            $this->updatedAt = new \DateTimeImmutable();
+//        }
+        if ($this->imageFile instanceof UploadedFile) {
             $this->updatedAt = new \DateTimeImmutable();
         }
     }
