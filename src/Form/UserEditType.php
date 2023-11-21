@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Form\DataTransformer\PhoneNumberTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -29,7 +30,10 @@ class UserEditType extends AbstractType
                 'download_uri' => true,
                 'image_uri' => true,
                 'asset_helper' => true,
-            ]);
+            ])
+            ->get('mobile_number')
+            ->addModelTransformer(new PhoneNumberTransformer())
+        ;
 //            ->add('email', EmailType::class)
         ;
     }
