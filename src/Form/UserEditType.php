@@ -19,6 +19,7 @@ class UserEditType extends AbstractType
 //            ->add('email', EmailType::class)
             ->add('firstname', TextType::class, ['required' => false])
             ->add('lastname', TextType::class, ['required' => false])
+            ->add('email', EmailType::class, ['required' => false])
             ->add('mobile_number', TelType::class, ['required' => false])
             ->add('imageFile', VichImageType::class, [
                 'required' => false,
