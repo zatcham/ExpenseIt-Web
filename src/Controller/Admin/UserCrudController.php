@@ -93,6 +93,4 @@ class UserCrudController extends AbstractCrudController
         $queryBuilder->setParameter('company', $user->getCompany());
         return $queryBuilder;
     }
-
-
 }
