@@ -5,12 +5,13 @@ namespace App\Controller\User;
 use App\Form\UserEditType;
 use App\Form\UserSecurityEditType;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+
+
 class UserSettingsController extends AbstractController
 {
 //    private $googleAuthenticator;
@@ -22,8 +23,14 @@ class UserSettingsController extends AbstractController
     #[Route('/user/settings', name: 'app_user_settings')]
     public function index(Request $request): Response
     {
+
+        $fullName = $this->getUser()->getFirstName() . ' ' . $this->getUser()->getLastName();
+        $this->getUser()->setFullName($fullName); // Why not update whilst here
+        $imageUrl = 'https://avatar.oxro.io/avatar.svg?name=' . $fullName;
+
         return $this->render('dashboard/user_settings/index.html.twig', [
             'controller_name' => 'UserSettingsController',
+            'avatar' => $imageUrl,
         ]);
     }
 
