@@ -60,9 +60,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
 
-//    #[ORM\Column(nullable: true)]
-//    private ?\DateTimeImmutable $updatedAt = null;
-
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Companies $company = null;
 
@@ -74,10 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $googleAuthenticatorSecret;
-
-    public function __construct()
-    {
-    }
 
     public function getId(): ?int
     {
@@ -213,13 +206,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     public function setImageFile(?File $imageFile = null): void
     {
         $this->imageFile = $imageFile;
-
-//        if (null !== $imageFile) {
-//            $this->updatedAt = new \DateTimeImmutable();
-//        }
-        if ($this->imageFile instanceof UploadedFile) {
-//            $this->updatedAt = new \DateTimeImmutable();
-        }
     }
 
     public function getImageFile(): ?File

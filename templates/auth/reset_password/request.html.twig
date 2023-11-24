@@ -1,12 +1,23 @@
-{% extends '../../base.html.twig' %}
+{% extends 'auth/base.html.twig' %}
 
 {% block title %}Reset your password{% endblock %}
 
-{% block body %}
-    {% for flash_error in app.flashes('reset_password_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
-    <h1>Reset your password</h1>
+{% block content %}
+
+<div id="content">
+    <div class="d-flex align-items-center justify-content-center container-sec">
+        <div class="wrapper container-fluid border rounded px-5" style="background-color: #f5f5f5;">
+            {% for flash_error in app.flashes('reset_password_error') %}
+                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+            {% endfor %}
+
+            <span class="title pb-3">
+                <img src="../assets/calid_logo_small.png" alt="ExpenseIt Logo">
+            </span>
+            <span class="title pb-3">
+                Reset Password
+            </span>
+
 
     {{ form_start(requestForm) }}
         {{ form_row(requestForm.email) }}
@@ -19,4 +30,8 @@
 
         <button class="btn btn-primary">Send password reset email</button>
     {{ form_end(requestForm) }}
+        </div>
+    </div>
+</div>
+
 {% endblock %}
