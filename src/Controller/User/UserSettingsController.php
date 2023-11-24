@@ -5,12 +5,13 @@ namespace App\Controller\User;
 use App\Form\UserEditType;
 use App\Form\UserSecurityEditType;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+
+
 class UserSettingsController extends AbstractController
 {
 //    private $googleAuthenticator;
@@ -39,17 +40,20 @@ class UserSettingsController extends AbstractController
         $form = $this->createForm(UserEditType::class);
         $form->handleRequest($request);
 
-        $form->get('firstname')->setData($user->getFirstName());
-        $form->get('lastname')->setData($user->getLastName());
-        $form->get('mobile_number')->setData($user->getMobileNumber());
-        $form->get('email')->setData($user->getEmail());
+//         TODO : Bug | Set data makes form submitted
+//        $form->get('firstname')->setData($user->getFirstName());
+//        $form->get('lastname')->setData($user->getLastName());
+//        $form->get('mobile_number')->setData($user->getMobileNumber());
+//        $form->get('email')->setData($user->getEmail());
+
 
         if ($form->isSubmitted() && $form->isValid()) {
+//            $this->getUser()->setRoles(['ROLE_ADMIN']);
             // TODO : Show current data on form before edit
             // TODO : Check if box is filled / set inputs to non required
             $user->setFirstName($form->get('firstname')->getData());
             $user->setLastName($form->get('lastname')->getData());
-            $user->setMobileNumber($form->get('mobile_number')->getData()); // TODO : Transformer to change to +44 format
+            $user->setMobileNumber($form->get('mobile_number')->getData());
 //            $user->setEmail($form->get('email')->getData()); // Bug : Validation error due to email already existing
             $edited = array(); // TODO : Count added items
 
