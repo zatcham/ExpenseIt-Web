@@ -48,7 +48,7 @@ class ResetPasswordController extends AbstractController
             );
         }
 
-        return $this->render('reset_password/request.html.twig', [
+        return $this->render('auth/reset_password/request.html.twig', [
             'requestForm' => $form->createView(),
         ]);
     }
@@ -124,7 +124,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('reset_password/reset.html.twig', [
+        return $this->render('auth/reset_password/reset.html.twig', [
             'resetForm' => $form->createView(),
         ]);
     }
@@ -157,10 +157,10 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('expenseit@zmit.co.uk', 'ExpenseIt'))
+            ->from(new Address('app@expenseit.tech', 'ExpenseIt'))
             ->to($user->getEmail())
             ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
+            ->htmlTemplate('emails/reset_pass.html.twig')
             ->context([
                 'resetToken' => $resetToken,
             ])
