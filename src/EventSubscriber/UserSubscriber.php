@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 use App\Entity\User;
 use App\Entity\UserSettings;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -14,15 +15,24 @@ class UserSubscriber implements EventSubscriberInterface
 {
     private $hasher;
     private $mailer;
+    private $security;
 
-    public function __construct(UserPasswordHasherInterface $hasher, MailerInterface $mailer) {
+    public function __construct(UserPasswordHasherInterface $hasher, MailerInterface $mailer, Security $security) {
         $this->hasher = $hasher;
         $this->mailer = $mailer;
+        $this->security = $security;
     }
 
     public function beforeEntityPersisted(BeforeEntityPersistedEvent $event): void {
         $user = $event->getEntityInstance();
         $this->generateAndSendPwd($user);
+        $this->setCompany($user);
+    }
+
+    private function setCompany(User $user): void {
+        $currentUser = $this->security->getUser();
+        $company = $currentUser->getCompany();
+        $user->setCompany($company);
     }
 
     private function generateAndSendPwd(User $user): void {
