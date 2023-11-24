@@ -22,8 +22,14 @@ class UserSettingsController extends AbstractController
     #[Route('/user/settings', name: 'app_user_settings')]
     public function index(Request $request): Response
     {
+
+        $fullName = $this->getUser()->getFirstName() . ' ' . $this->getUser()->getLastName();
+        $this->getUser()->setFullName($fullName); // Why not update whilst here
+        $imageUrl = 'https://avatar.oxro.io/avatar.svg?name=' . $fullName;
+
         return $this->render('dashboard/user_settings/index.html.twig', [
             'controller_name' => 'UserSettingsController',
+            'avatar' => $imageUrl,
         ]);
     }
 
