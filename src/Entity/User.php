@@ -60,8 +60,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
     #[ORM\Column(nullable: true)]
     private ?int $imageSize = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
+//    #[ORM\Column(nullable: true)]
+//    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Companies $company = null;
@@ -218,7 +218,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, TwoFact
 //            $this->updatedAt = new \DateTimeImmutable();
 //        }
         if ($this->imageFile instanceof UploadedFile) {
-            $this->updatedAt = new \DateTimeImmutable();
+//            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
