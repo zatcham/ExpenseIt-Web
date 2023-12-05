@@ -597,6 +597,9 @@ input[type=number] {
 }
 
 .oauth-wrapper {
+    justify-content: center;
+    align-items: center;
+    display: flex;
     width: 40px;
     display: flex;
     justify-content: center;
@@ -606,7 +609,6 @@ input[type=number] {
     background-color: white;
     cursor: pointer;
 }
-
 
 .oauth-wrapper:hover .oauth-icon{
     transform: rotate(15deg);
