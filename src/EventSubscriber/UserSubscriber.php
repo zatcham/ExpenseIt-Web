@@ -5,9 +5,11 @@ namespace App\EventSubscriber;
 use App\Entity\User;
 use App\Entity\UserSettings;
 use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -44,11 +46,21 @@ class UserSubscriber implements EventSubscriberInterface
         $settings->setNotifyOnAccept(true);
         $user->setUserSettings($settings);
         $user->setPassword($this->hasher->hashPassword($user, $plainPassword));
-        $email = (new Email())
-            ->from('app@expenseit.tech')
+//        $email = (new Email())
+//            ->from('app@expenseit.tech')
+//            ->to($user->getEmail())
+//            ->subject('Your ExpenseIt Account')
+//            ->text('Password: ' . $plainPassword);
+        $email = (new TemplatedEmail())
+            ->from(new Address('app@expenseit.tech', 'ExpenseIt'))
             ->to($user->getEmail())
             ->subject('Your ExpenseIt Account')
-            ->text('Password: ' . $plainPassword);
+            ->htmlTemplate('emails/new_user.html.twig')
+            ->context([
+                'plainPassword' => $plainPassword,
+                'companyName' => $user->getCompanyName()
+            ]);
+
         $this->mailer->send($email);
     }
 
