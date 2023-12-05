@@ -341,6 +341,21 @@ iframe {
     transition: all .4s
 }
 
+.error-message{
+    color: var(--bs-danger);
+    text-align: center;
+}
+
+.input-error::before{
+    width: 100%;
+    background: var(--bs-danger) !important;
+}
+
+.input-error::after{
+    color: var(--bs-danger) !important;
+}
+
+
 .input:focus + .focus-input::after {
     top: -15px
 }
