@@ -9,16 +9,19 @@
             <div class="wrapper container-fluid border rounded px-5" style="background-color: #f5f5f5;">
                 <span class="title pb-3">
                 <img src="../assets/calid_logo_small.png" alt="ExpenseIt Logo">
-            </span>
+                </span>
                 <span class="title pb-3">
-                Reset Password
-            </span>
-                <p>
-                    If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password.
-                    This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-                </p>
-                <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
-
+                    Reset Password
+                    </span>
+                <div class="align-content-center text-center">
+                    <p>
+                        If an account matching your email exists, then an email was just sent that contains a link that you can use to reset your password. </p>
+                    </p>
+                    <br/>
+                    <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+                    <br/>
+                    <p><small>This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</small></p>
+                </div>
             </div>
         </div>
     </div>
