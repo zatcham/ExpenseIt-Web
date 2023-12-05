@@ -13,7 +13,7 @@
                 <span class="title pb-3">
                     <img class="auth-logo" src="images/logo/expenseit.svg" alt="ExpenseIt Logo">
                 </span>
-                <span class="title pb-3">
+                <span class="title mb-5">
                     Register
                 </span>
 
@@ -41,8 +41,8 @@
                 </div>
 
                 <div class="wrapper-input validate-input" data-validate="Enter password">
-                        <span class="show-pw">
-                            <i class="fa fa-eye" id="show-pass"></i>
+                        <span class="show-pw" id="show-pass">
+                            <i class="fa fa-eye" id="show-pass-icon"></i>
                         </span>
                     {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'input pass-font'} , 'id': 'password'}) }}
                     <span class="focus-input" data-placeholder="Password"></span>
@@ -53,12 +53,12 @@
 {#                    <span class="focus-input" data-placeholder="Confirm Password"></span>#}
 {#                </div>#}
 
-                <div class="wrapper-input validate-input" data-validate="Agree to terms">
+                <div class="d-flex gap-2 validate-input" data-validate="Agree to terms">
                     {{ form_widget(registrationForm.agreeTerms) }}
-                    <span class="focus-input" data-placeholder="Accept our T&Cs?"></span>
+                    <p class="text-small cursor-pointer" id="termsText">I accept the Terms and Conditions</p>
                 </div>
 
-                <div class="container-btn mt-3">
+                <div class="container-btn mt-3 mb-3">
                     <div class="wrap-btn">
                         <div class="bg-btn"></div>
                         <button type="submit" class="form-btn">
@@ -66,6 +66,11 @@
                         </button>
                     </div>
                 </div>
+
+                <div class="text-center">
+                    <a class="small back-link" href="{{ path('app_login') }}">Return to login</a>
+                </div>
+
                 {{ form_end(registrationForm) }}
             </div>
         </div>
