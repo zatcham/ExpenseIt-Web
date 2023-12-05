@@ -78,3 +78,22 @@
 
 
 {% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function() {
+            // if ($('#username').va)
+            if ($('#registration_form_firstname').val().trim() != "") {
+                $('#registration_form_firstname').addClass('has-val');
+            }
+
+            if ($('#registration_form_lastname').val().trim() != "") {
+                $('#registration_form_lastname').addClass('has-val');
+            }
+
+            if ($('#registration_form_email').val().trim() != "") {
+                $('#registration_form_email').addClass('has-val');
+            }
+        })
+    </script>
+{% endblock %}
