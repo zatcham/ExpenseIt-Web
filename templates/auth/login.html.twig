@@ -14,13 +14,17 @@
                 <span class="title mb-5">
                          Welcome
                     </span>
+
                 {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    <p class="error-message">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
                 {% endif %}
 
-                <div class="wrapper-input validate-input" data-validate="Example: john@doe.com">
+                <div
+                        class="wrapper-input validate-input"
+                        data-validate="Example: john@doe.com"
+                >
                     <input class="input pass-font" type="text" name="_username" id="username" value="{{ last_username }}" required>
-                    <span class="focus-input" data-placeholder="Email"></span>
+                    <span class="focus-input {% if error %}input-error{% endif %}" data-placeholder="Email"></span>
                 </div>
 
                 <div class="wrapper-input validate-input" data-validate="Enter password" style="margin-bottom: 0px; !important">
@@ -28,7 +32,7 @@
                         <i class="fa fa-eye" id="show-pass-icon"></i>
                     </span>
                     <input class="input pass-font" type="password" name="_password" id="password">
-                    <span class="focus-input" data-placeholder="Password"></span>
+                    <span class="focus-input {% if error %}input-error{% endif %}" data-placeholder="Password"></span>
                 </div>
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
