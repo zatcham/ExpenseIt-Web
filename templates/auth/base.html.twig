@@ -17,7 +17,7 @@
     {% block content %}
     {% endblock %}
     <script type="module">
-        import { Gradient } from './{{ asset('js/Gradient.js') }}'
+        import { Gradient } from '{{ asset('js/Gradient.js') }}'
         const gradient = new Gradient()
         gradient.initGradient('#gradient-canvas')
     </script>
