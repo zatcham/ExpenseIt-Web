@@ -18,10 +18,6 @@
     --gradient-color-4: #223f96;
 }
 
-a{
-    text-decoration: none !important;
-}
-
 
 @media screen and (max-width: 768px) {
     #gradient-canvas {
@@ -78,8 +74,12 @@ a{
     #content form input,
     #content form textarea {
         display: block;
-        width: 100%;
-        margin-bottom: 1rem;
+    }
+    #content form #termsText{
+        font-size: 13px;
+    }
+    #content form .back-link{
+        font-size: 14px;
     }
 }
 
@@ -232,6 +232,10 @@ iframe {
     border: none !important
 }
 
+.cursor-pointer:hover{
+    cursor: pointer;
+}
+
 /* Login box */
 .wrapper {
     width: 390px;
@@ -244,6 +248,11 @@ iframe {
     -webkit-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
     -o-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
     -ms-box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1)
+}
+
+.wrapper .back-arrow{
+    border: 1px solid red;
+    position: absolute;
 }
 
 .login-form {

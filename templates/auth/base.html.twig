@@ -44,6 +44,13 @@
             })
         })
     </script>
+    <script>
+        document.getElementById('termsText').addEventListener('click', function() {
+            var checkbox = document.getElementById('registration_form_agreeTerms');
+
+            checkbox.checked = !checkbox.checked;
+        });
+    </script>
     {% block js %}
     {% endblock %}
 </body>
