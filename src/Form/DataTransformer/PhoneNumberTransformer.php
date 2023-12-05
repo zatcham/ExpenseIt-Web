@@ -28,7 +28,10 @@ class PhoneNumberTransformer implements DataTransformerInterface
             return null;
         }
         $phoneNum = str_replace(' ', '', $value); // Remove spaces
-        $phoneNum = '+44' . ltrim($phoneNum, '0'); // Remove leading 0 and replace w +44. TODO : Allow other country codes?
+        if (!str_starts_with($phoneNum, '+44')) {
+            $phoneNum = '+44' . ltrim($phoneNum, '0'); // Remove leading 0 and replace with +44
+        }
+
         return $phoneNum;
     }
 }
