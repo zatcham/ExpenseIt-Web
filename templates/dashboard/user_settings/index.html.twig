@@ -105,7 +105,7 @@
                         <li class="list-group-item border-0 px-0">
                             <div class="form-check form-switch ps-0">
                                 <input class="form-check-input ms-auto" type="checkbox" id="notifyOnAcceptToggle"
-                                       {% if app.user.userSettings.notifyOnAccept == 1 %} checked {% endif %}>
+                                       {% if app.user.userSettings.notifyOnAccept == 1 %} checked {% endif %} data-setting="notifyOnAccept">
                                 <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="notifyOnAcceptToggle">Notify me when my request is accepted</label>
                             </div>
                         </li>
@@ -228,4 +228,42 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+        $(document).ready(function() {
+            // Buttons all in form-check-input class
+            $('.form-check-input').click(function(e) {
+                e.preventDefault();
+                console.log('Doing ajax for setting toggle!');
+                // Get setting
+                var setting = $(this).data('setting');
+
+                // Do ajax
+                $.ajax({
+                    url: '/user/toggle/' + setting,
+                    method: 'GET',
+                    success: function(response) {
+                        // Update the button state dynamically based on the response
+                        if (response.toggled) {
+                            // Button is toggled ON
+                            $(e.target).prop('checked', response.toggled);
+                            console.log('Setting: ' + setting + ' enabled succesfully');
+                        } else {
+                            // Button is toggled OFF
+                            $(e.target).prop('checked', response.toggled);
+                            console.log('Setting: ' + setting + ' disable succesfully');
+                        }
+                    },
+                    error: function(xhr) {
+                        // Handle errors if needed
+                        console.error('Toggle request failed:', xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+
 {% endblock %}

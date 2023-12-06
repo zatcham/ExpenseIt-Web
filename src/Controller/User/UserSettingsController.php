@@ -2,10 +2,13 @@
 
 namespace App\Controller\User;
 
+use App\Entity\UserSettings;
 use App\Form\UserEditType;
 use App\Form\UserSecurityEditType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -89,6 +92,32 @@ class UserSettingsController extends AbstractController
         return $this->render('dashboard/user_settings/edit_security.html.twig', [
             'securityForm' => $form,
         ]);
+    }
+
+    #[Route('/user/toggle/{setting}', name:'user_toggle')]
+    public function toggleButton(string $setting, EntityManagerInterface $entityManager): JsonResponse {
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('User not authenticated');
+        }
+
+        $userSettings = $user->getUserSettings();
+
+        $setter = 'set' . ucfirst($setting);
+        $getter = 'get' . ucfirst($setting);
+        if (!method_exists($userSettings, $setter) || !method_exists($userSettings, $getter)) {
+            throw $this->createNotFoundException('Invalid setting provided');
+        }
+
+        $userSettings->{$setter}(!$userSettings->{$getter}()); // Toggle setting
+//        $userSettings->setNotifyOnAccept(true);
+        $entityManager->persist($userSettings);
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'success', 'toggled' => $userSettings->{$getter}()
+        ]);
+
     }
 
 }
