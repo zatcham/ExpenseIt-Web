@@ -3,45 +3,41 @@
 {% block title %}Reset your password{% endblock %}
 
 {% block content %}
-<div id="content">
-    <div class="d-flex align-items-center justify-content-center container-sec">
-        <div class="wrapper container-fluid border rounded px-5" style="background-color: #f5f5f5;">
-            {% for flash_error in app.flashes('reset_password_error') %}
-                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-            {% endfor %}
+    <div id="auth-container">
+        {% for flash_error in app.flashes('reset_password_error') %}
+            <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        {% endfor %}
 
-            <span class="title pb-3">
+        <span class="title pb-3">
                 <img class="auth-logo" src="{{ asset('images/logo/expenseit.svg') }}" alt="ExpenseIt Logo">
             </span>
-                <span class="title mb-5">
+        <span class="title mb-5">
               Reset Password
             </span>
 
-    {{ form_start(resetForm) }}
-            <div class="wrapper-input validate-input mt-2 pt-2" data-validate="Enter password" style="margin-bottom: 0px; !important">
+        {{ form_start(resetForm) }}
+        <div class="wrapper-input validate-input mt-2 pt-2" data-validate="Enter password" style="margin-bottom: 0px; !important">
                     <span class="show-pw">
                         <i class="fa fa-eye" id="show-pass"></i>
                     </span>
-                {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'input pass-font'} , 'id': 'password'}) }}
-                <span class="focus-input" data-placeholder="Password"></span>
-            </div>
-
-
-            <div class="wrapper-input validate-input mt-4 pt-4" data-validate="Enter password" style="margin-bottom: 0px; !important">
-                {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'input pass-font'} , 'id': 'password'}) }}
-                <span class="focus-input" data-placeholder="Confirm Password"></span>
-            </div>
-
-            <div class="container-btn mt-3">
-                <div class="wrap-btn">
-                    <div class="bg-btn"></div>
-                    <button type="submit" class="form-btn">
-                        Reset Password
-                    </button>
-                </div>
-            </div>
-    {{ form_end(resetForm) }}
+            {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'input pass-font'} , 'id': 'password'}) }}
+            <span class="focus-input" data-placeholder="Password"></span>
         </div>
+
+
+        <div class="wrapper-input validate-input mt-4 pt-4" data-validate="Enter password" style="margin-bottom: 0px; !important">
+            {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'input pass-font'} , 'id': 'password'}) }}
+            <span class="focus-input" data-placeholder="Confirm Password"></span>
+        </div>
+
+        <div class="container-btn mt-3">
+            <div class="wrap-btn">
+                <div class="bg-btn"></div>
+                <button type="submit" class="form-btn">
+                    Reset Password
+                </button>
+            </div>
+        </div>
+        {{ form_end(resetForm) }}
     </div>
-</div>
 {% endblock %}
