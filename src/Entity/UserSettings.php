@@ -37,7 +37,7 @@ class UserSettings
         return $this;
     }
 
-    public function isNotifyOnAccept(): ?bool
+    public function getNotifyOnAccept(): ?bool
     {
         return $this->NotifyOnAccept;
     }
