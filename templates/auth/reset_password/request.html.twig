@@ -12,7 +12,7 @@
             {% endfor %}
 
             <span class="title pb-3">
-                <img class="auth-logo" src="images/logo/expenseit.svg" alt="ExpenseIt Logo">
+                <img class="auth-logo" src="{{ asset('images/logo/expenseit.svg') }}" alt="ExpenseIt Logo">
             </span>
             <span class="title mb-5">
                 Reset Password
@@ -40,6 +40,9 @@
             </div>
         </div>
         {{ form_end(requestForm) }}
+            <div class="text-center mt-3">
+                <a class="small back-link" href="{{ path('app_login') }}">Return to login</a>
+            </div>
         </div>
     </div>
 </div>

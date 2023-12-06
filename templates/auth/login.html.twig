@@ -9,7 +9,7 @@
             <form class="login-form validate-form" action="{{ path('app_login') }}" method="POST">
                     <span class="title pb-3">
                         <!--<i class="zmdi zmdi-font"></i>-->
-                        <img class="auth-logo" src="images/logo/expenseit.svg" alt="ExpenseIt Logo">
+                        <img class="auth-logo" src="{{ asset('images/logo/expenseit.svg') }}" alt="ExpenseIt Logo">
                     </span>
                 <span class="title mb-5">
                          Welcome
@@ -73,6 +73,13 @@
                         </span>
                     <a class="text-2" href="{{ path('app_register') }}">
                         Sign Up
+                    </a>
+                    <br>
+                    <span class="text-1">
+                        Forgot your password?
+                    </span>
+                    <a class="text-2" href="{{ path('app_forgot_password_request') }}">
+                        Reset it
                     </a>
                 </div>
                 <footer class="text-center mt-2">
