@@ -42,3 +42,16 @@
         </div>
     </div>
 {% endblock %}
+
+{% block js %}
+    <script>
+        // If alr has val, add class
+        $(document).ready(function() {
+            if ($('#reset_password_request_form_email').val().trim() != "") {
+                $('#reset_password_request_form_email').addClass('has-val');
+            }
+        });
+    </script>
+
+
+{% endblock %}
