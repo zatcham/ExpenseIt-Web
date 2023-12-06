@@ -20,7 +20,7 @@ class UserSettingsController extends AbstractController
 //        $this->googleAuthenticator = $googleAuthenticator;
 //    }
 
-    #[Route('/user/settings', name: 'app_user_settings')]
+    #[Route('/user/settings', name: 'user_settings')]
     public function index(Request $request): Response
     {
 
