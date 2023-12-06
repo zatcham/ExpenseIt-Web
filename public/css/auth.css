@@ -693,3 +693,29 @@ fieldset {
     color: black;
     margin: 0 2px;
 }
+
+
+
+
+
+#auth-container{
+    height: 100vh;
+    width: 60vw;
+    background-color: white;
+    padding: 5rem 3rem;
+}
+
+@media only screen and (max-width: 1080px){
+    #auth-container{
+        width: 100vw;
+    }
+}
+
+@media only screen and (max-width: 770px){
+    #auth-container{
+        width: 100vw;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
