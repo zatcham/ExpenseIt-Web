@@ -1,0 +1,23 @@
+{% extends 'error/base.html.twig' %}
+
+{% block title %}Access Denied{% endblock %}
+
+{% block content %}
+
+    <div id="content">
+        <div class="d-flex align-items-center justify-content-center container-sec">
+            <div class="wrapper container-fluid">
+                <span class="title pb-3">
+                    <img class="auth-logo" src="{{ asset('images/logo/expenseit.svg') }}" alt="ExpenseIt Logo">
+                </span>
+                <span class="title mb-5">
+                    Access Denied
+                </span>
+                <span class="text-center">
+                    You're not allowed to visit this page!
+                </span>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
