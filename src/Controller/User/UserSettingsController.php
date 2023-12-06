@@ -91,14 +91,4 @@ class UserSettingsController extends AbstractController
         ]);
     }
 
-    private function handleImageUpload(User $user): void { // TODO: Blocked
-        $image = $user->getImageFile();
-
-        if ($image) {
-            $uploader = $this->get('vich_uploader.upload_handler');
-            $uploader->upload($user, 'avatars');
-
-            $user->setImageFile(null);
-        }
-    }
 }

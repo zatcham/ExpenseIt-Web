@@ -6,15 +6,15 @@ use App\Entity\UserSettings;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
 class UserInfoController extends AbstractController
 {
     #[Route('/api/user_info', name: 'api_user_info')]
-    public function getUserInfo(UploaderHelper $helper): JsonResponse
+    public function getUserInfo(): JsonResponse
     {
         $user = $this->getUser();
-        $imageUrl = $helper->asset($user, 'imageFile');
+        $fullName = $user->getFirstName() . ' ' . $user->getLastName();
+        $imageUrl = 'https://avatar.oxro.io/avatar.svg?name=' . $fullName;
         $userSettings = $user->getUserSettings();
         $settingsArray['notifyOnAccept'] = $userSettings->isNotifyOnAccept(); // TODO : Refactor
 
