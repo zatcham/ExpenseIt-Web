@@ -115,9 +115,11 @@
 <!-- End Side -->
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
 
+    {% if not app.user.verified %}
     <div class="navbar bg-warning navbar-main navbar-expand-lg d-flex justify-content-center align-items-center p-4 mx-4 shadow-none border-radius-xl position-sticky shadow-blur mt-4 left-auto top-1 z-index-sticky">
-        <a href="" class="p-0 m-0 text-white">Please verify your email to continue using ExpenseIT.</a>
+        <a href="" class="p-0 m-0 text-white" id="user-verify-banner">Please verify your email to continue using ExpenseIt.</a>
     </div>
+    {% endif %}
 
     <!-- Top Nav -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl position-sticky blur shadow-blur mt-4 left-auto top-1 z-index-sticky" id="navbarBlur" navbar-scroll="true">
@@ -312,6 +314,28 @@
         }
         Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
+</script>
+
+<script>
+    // Verify email banner ajax
+    $(document).ready(function () {
+        $('#user-verify-banner').click(function (e) {
+            e.preventDefault();
+            console.log('doing ajax for user verify email');
+
+            $.ajax({
+                url: '/user/send_verify/',
+                method: 'GET',
+                success: function(response) {
+                    console.log('email send succesfully');
+                },
+                error: function(xhr) {
+                    console.error('request failed: ' + xhr.responseText);
+                }
+            })
+        })
+    })
+
 </script>
 
 </body>
