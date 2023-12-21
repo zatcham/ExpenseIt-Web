@@ -1,0 +1,67 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}View Requests{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-4">
+    <div class="row mt-4">
+        <div class="col-sm-6 col-lg-12">
+            <div class="card h-100">
+                <div class="card-header pb-0 p-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="mb-0">Current Requests</h6>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end align-items-center">
+                            <i class="far fa-calendar-alt me-2" aria-hidden="true"></i>
+                            <small>Remove this</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <ul class="list-group">
+                        {% for request in app.user.requests|filter(request => request.active == true) %}
+                        <li class="list-group-item border-0 justify-content-between ps-0 pb-0 border-radius-lg">
+                            <div class="d-flex">
+                                <div class="d-flex align-items-center">
+                                    {% if request.status == 'pending' %}
+                                        <button class="btn btn-icon-only btn-rounded btn-outline-info mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-spinner" aria-hidden="true"></i>
+                                        </button>
+                                    {% endif %}
+                                    {% if request.status == 'attention' %}
+                                        <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-exclamation"></i>
+                                        </button>
+                                    {% endif %}
+                                    {% if request.status == 'refusal' %}
+                                        <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    {% endif %}
+                                    {% if request.status == 'accepted' %}
+                                        <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    {% endif %}
+
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mb-1 text-dark text-sm">{{ request.merchant }}</h6>
+                                        <span class="text-xs">{{ request.timestamp|date('Y-m-d') }} at {{ request.timestamp|date('H:i') }}</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center text-danger text-gradient text-sm font-weight-bold ms-auto">
+                                    - £ {{ request.price }}
+                                </div>
+                            </div>
+                            <hr class="horizontal dark mt-3 mb-2">
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %}

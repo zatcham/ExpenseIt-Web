@@ -57,6 +57,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?UserSettings $userSettings = null;
 
+    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Request::class, orphanRemoval: true)]
+    private Collection $requests;
+
+    public function __construct()
+    {
+        $this->requests = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -232,6 +240,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->userSettings = $userSettings;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Request>
+     */
+    public function getRequests(): Collection
+    {
+        return $this->requests;
+    }
+
+    public function addRequest(Request $request): static
+    {
+        if (!$this->requests->contains($request)) {
+            $this->requests->add($request);
+            $request->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRequest(Request $request): static
+    {
+        if ($this->requests->removeElement($request)) {
+            // set the owning side to null (unless already changed)
+            if ($request->getUser() === $this) {
+                $request->setUser(null);
+            }
+        }
 
         return $this;
     }
