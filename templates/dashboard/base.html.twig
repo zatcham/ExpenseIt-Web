@@ -66,6 +66,7 @@
             <li class="nav-item">
                 <a class="nav-link {% if app.request.attributes.get('_route') starts with 'requests_view' %}active{% endif %}" href="{{ path('requests_view') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-list"></i>
                     </div>
                     <span class="nav-link-text ms-1">Current</span>
                 </a>
@@ -79,6 +80,22 @@
                 </a>
             </li>
             <hr/>
+            {% if is_granted('ROLE_APPROVAL_RW') %}
+                <li class="nav-item mt-3">
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Approvals </h6>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'approve' %}active{% endif %}" href="{{ path('approve_list') }}">
+                        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Current</span>
+                    </a>
+                </li>
+                <hr/>
+
+
+            {% endif %}
 
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account</h6>
@@ -149,7 +166,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                     <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="{{ path('app_home') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><a href="{{ path(app.request.attributes.get('_route')) }}"> {{ block('title') }}</a></li>
+                    <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }}"> {{ block('title') }}</a></li>
                 </ol>
 {#                <h6 class="font-weight-bolder mb-0">Dashboard</h6>#}
             </nav>
@@ -323,6 +340,7 @@
 <script src="{{ asset('js/perfect-scrollbar.min.js') }}"> </script>
 <script src="{{ asset('js/smooth-scrollbar.min.js') }}"> </script>
 <script src="{{ asset('js/dashboard.js') }}"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.0/countUp.min.js" integrity="sha512-E0zfDwA1CopT4gzJmj9tMpd7O6pTpuybTK58eY1GwqptdasUohyImuualLt/S5XvM8CDnbaTNP/7MU3bQ5NmQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 {% block js %}
 

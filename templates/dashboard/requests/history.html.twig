@@ -46,7 +46,7 @@
                                     {% endif %}
 
                                     <div class="d-flex flex-column">
-                                        <h6 class="mb-1 text-dark text-sm">{{ request.merchant }}</h6>
+                                        <a class="mb-1 text-dark text-sm text-decoration-underline" href="{{ path('requests_detail', {'id': request.id}) }}">{{ request.merchant }}</a>
                                         <span class="text-xs">{{ request.timestamp|date('Y-m-d') }} at {{ request.timestamp|date('H:i') }}</span>
                                     </div>
                                 </div>
