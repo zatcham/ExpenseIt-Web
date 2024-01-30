@@ -16,7 +16,7 @@ class UserInfoController extends AbstractController
         $fullName = $user->getFirstName() . ' ' . $user->getLastName();
         $imageUrl = 'https://avatar.oxro.io/avatar.svg?name=' . $fullName;
         $userSettings = $user->getUserSettings();
-        $settingsArray['notifyOnAccept'] = $userSettings->isNotifyOnAccept(); // TODO : Refactor
+        $settingsArray['notifyOnAccept'] = $userSettings->getNotifyOnAccept(); // TODO : Refactor
 
         return $this->json([
             'roles' => $user->getRoles(),

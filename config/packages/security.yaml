@@ -65,6 +65,12 @@ security:
 
     access_denied_url: 'error_access_denied'
 
+    role_hierarchy:
+        ROLE_FINANCE_ADMIN: [ROLE_USER, ROLE_APPROVAL_RW]
+        ROLE_APPROVAL_RW: ROLE_USER
+        ROLE_USER_ADMIN: ROLE_USER
+        ROLE_ORG_ADMIN: [ROLE_FINANCE_ADMIN, ROLE_USER_ADMIN]
+        ROLE_SUPER_ADMIN: [ROLE_ORG_ADMIN, ROLE_ADMIN]
 
 when@test:
     security:
