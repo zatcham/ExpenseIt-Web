@@ -25,9 +25,17 @@ class Department
     #[ORM\OneToMany(mappedBy: 'department', targetEntity: Request::class)]
     private Collection $requests;
 
+    #[ORM\OneToMany(mappedBy: 'department', targetEntity: User::class)]
+    private Collection $users;
+
+    #[ORM\OneToMany(mappedBy: 'department', targetEntity: Budget::class)]
+    private Collection $budgets;
+
     public function __construct()
     {
         $this->requests = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->budgets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,6 +91,66 @@ class Department
             // set the owning side to null (unless already changed)
             if ($request->getDepartment() === $this) {
                 $request->setDepartment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getDepartment() === $this) {
+                $user->setDepartment(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Budget>
+     */
+    public function getBudgets(): Collection
+    {
+        return $this->budgets;
+    }
+
+    public function addBudget(Budget $budget): static
+    {
+        if (!$this->budgets->contains($budget)) {
+            $this->budgets->add($budget);
+            $budget->setDepartment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBudget(Budget $budget): static
+    {
+        if ($this->budgets->removeElement($budget)) {
+            // set the owning side to null (unless already changed)
+            if ($budget->getDepartment() === $this) {
+                $budget->setDepartment(null);
             }
         }
 

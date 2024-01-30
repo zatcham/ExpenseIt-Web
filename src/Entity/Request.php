@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RequestRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -38,6 +40,14 @@ class Request
 
     #[ORM\ManyToOne(inversedBy: 'requests')]
     private ?Department $department = null;
+
+    #[ORM\OneToMany(mappedBy: 'relation', targetEntity: Receipt::class)]
+    private Collection $receipts;
+
+    public function __construct()
+    {
+        $this->receipts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -136,6 +146,36 @@ class Request
     public function setDepartment(?Department $department): static
     {
         $this->department = $department;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Receipt>
+     */
+    public function getReceipts(): Collection
+    {
+        return $this->receipts;
+    }
+
+    public function addReceipt(Receipt $receipt): static
+    {
+        if (!$this->receipts->contains($receipt)) {
+            $this->receipts->add($receipt);
+            $receipt->setRelation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceipt(Receipt $receipt): static
+    {
+        if ($this->receipts->removeElement($receipt)) {
+            // set the owning side to null (unless already changed)
+            if ($receipt->getRelation() === $this) {
+                $receipt->setRelation(null);
+            }
+        }
 
         return $this;
     }
