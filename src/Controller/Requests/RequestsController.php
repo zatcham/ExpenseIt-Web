@@ -2,6 +2,7 @@
 
 namespace App\Controller\Requests;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,7 @@ class RequestsController extends AbstractController
     #[Route('/requests/detail/{id}', name: 'requests_detail')]
     public function detail(Request $request) : Response {
         return $this->render('dashboard/requests/detail.html.twig');
+
     }
 
 
@@ -32,6 +34,10 @@ class RequestsController extends AbstractController
         $dept = $user->getDepartment();
         $sum = 0.00;
         $percent = 0; // TODO
+
+        if (!$dept) { // Issue with users not yet assigned a department
+            return 0;
+        }
 
         foreach($dept->getRequests() as $request) {
             if ($this->isWithinLast24($request->getTimestamp())) {
@@ -49,6 +55,9 @@ class RequestsController extends AbstractController
 
         $count = $previous = $percent = 0;
         $dept = $this->getUser()->getDepartment();
+        if (!$dept) {
+            return 0;
+        }
 
         foreach($dept->getRequests() as $request) {
             if ($this->isWithinLast24($request->getTimestamp())) {
