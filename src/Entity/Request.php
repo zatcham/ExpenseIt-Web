@@ -23,9 +23,6 @@ class Request
     #[ORM\Column(length: 255)]
     private ?string $merchant = null;
 
-    #[ORM\Column]
-    private ?float $cost = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $timestamp = null;
 
@@ -74,18 +71,6 @@ class Request
     public function setMerchant(string $merchant): static
     {
         $this->merchant = $merchant;
-
-        return $this;
-    }
-
-    public function getCost(): ?float
-    {
-        return $this->cost;
-    }
-
-    public function setCost(float $cost): static
-    {
-        $this->cost = $cost;
 
         return $this;
     }
