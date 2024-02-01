@@ -52,7 +52,6 @@ class RequestsApiController extends AbstractController
         // Status assumed to be pending?
         // Allow for multiple depts for user? TODO
         $rq->setUser($user);
-        $rq->setCost(0);
         $rq->setPrice($data['cost']); // What retard added cost and price ....
         $rq->setActive(true);
         $rq->setStatus('pending');
