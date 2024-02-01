@@ -43,9 +43,6 @@ class Request
     #[ORM\OneToMany(mappedBy: 'relation', targetEntity: Receipt::class)]
     private Collection $receipts;
 
-    #[ORM\Column(type: 'uuid', nullable: true)]
-    private ?Uuid $uuid = null;
-
     public function __construct()
     {
         $this->receipts = new ArrayCollection();
@@ -170,15 +167,4 @@ class Request
         return $this;
     }
 
-    public function getUuid(): ?Uuid
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(?Uuid $uuid): static
-    {
-        $this->uuid = $uuid;
-
-        return $this;
-    }
 }
