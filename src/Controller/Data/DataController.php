@@ -30,7 +30,7 @@ class DataController extends AbstractController // Rename TODO
         }
 
         $userId = $this->getUser()->getId();
-        $data = $requestRepository->getMonthlyForUser($userId);
+        $data = $requestRepository->getWeeklyForUser($userId);
         return $this->json($data);
 
     }

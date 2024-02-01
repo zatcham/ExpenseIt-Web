@@ -36,15 +36,15 @@ class RequestRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function getMonthlyForUser($userId) {
+    public function getWeeklyForUser($userId) {
         $qb = $this->createQueryBuilder('r');
 
-        $qb->select('YEAR(r.timestamp) AS year', 'MONTH(r.timestamp) AS month', 'SUM(r.price) AS total_price', 'COUNT(r.id) AS count')
+        $qb->select('YEAR(r.timestamp) AS year', 'WEEK(r.timestamp) AS week', 'SUM(r.price) AS total_price', 'COUNT(r.id) AS count')
             ->where('r.User = :userId')
             ->andWhere('r.timestamp > :oneYearAgo')
-            ->groupBy('year', 'month')
+            ->groupBy('year', 'week')
             ->orderBy('year', 'ASC')
-            ->addOrderBy('month', 'DESC')
+            ->addOrderBy('week', 'DESC')
             ->setParameter('userId', $userId)
             ->setParameter('oneYearAgo', new \DateTime('-1 year'));
 

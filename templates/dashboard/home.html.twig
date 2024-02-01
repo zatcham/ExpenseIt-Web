@@ -100,16 +100,15 @@
             <div class="col-lg-7">
                 <div class="card z-index-2">
                     <div class="card-header pb-0">
-                        <h6>Sales overview</h6>
+                        <h6>Your weekly overview</h6>
                         <p class="text-sm">
                             <i class="fa fa-arrow-up text-success"></i>
-                            <span class="font-weight-bold">4% more</span> in 2021
+                            <span class="font-weight-bold">You spent 4% more</span> this week
                         </p>
                     </div>
                     <div class="card-body p-3">
                         <div class="chart">
                             <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
-{#                            {{ render_chart(deptExpenditure_chart, {'class': 'chart-canvas'}) }}#}
                         </div>
                     </div>
                 </div>
@@ -122,8 +121,8 @@
                                 <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
                             </div>
                         </div>
-                        <h6 class="ms-2 mt-4 mb-0"> Department Expenditure </h6>
-                        <p class="text-sm ms-2"> (<span class="font-weight-bolder">+23%</span>) than last week </p>
+                        <h6 class="ms-2 mt-4 mb-0"> {{ app.user.department.name }} Expenditure </h6>
+                        <p class="text-sm ms-2"> (<span class="font-weight-bolder">+23%</span>) than last month </p>
                         <div class="container border-radius-lg">
                             <div class="row">
                                 <div class="col-3 py-3 ps-0">
@@ -493,7 +492,7 @@
         fetch('/data/user/weekly')
             .then(response => response.json())
             .then(data => {
-                const labels = data.map(item => `${item.year}-${item.month}`);
+                const labels = data.map(item => `${item.year}-${item.week}`);
                 const dataset = data.map(item => item.total_price);
                 const count = data.map(item => item.count);
 
