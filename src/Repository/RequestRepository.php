@@ -22,23 +22,31 @@ class RequestRepository extends ServiceEntityRepository
     }
 
     public function getMonthlyForDepartment($deptId) {
-//        $em = $this->getEntityManager();
         $qb = $this->createQueryBuilder('r');
 
         $qb->select('YEAR(r.timestamp) AS year', 'MONTH(r.timestamp) AS month', 'SUM(r.price) AS total_price')
             ->where('r.department = :deptId')
             ->andWhere('r.timestamp > :oneYearAgo')
             ->groupBy('year', 'month')
-            ->orderBy('year', 'DESC')
+            ->orderBy('year', 'ASC')
             ->addOrderBy('month', 'DESC')
             ->setParameter('deptId', $deptId)
             ->setParameter('oneYearAgo', new \DateTime('-1 year'));
 
-//        $qb->select('SUM(r.price) AS total_price')
-////            ->from('Request', 'r');
-//            ->where('r.department = :deptID')
-//            ->setParameter('deptID', $deptId);
-////            ->setParameter('oneYearAgo', new \DateTime('-1 year'));
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getMonthlyForUser($userId) {
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->select('YEAR(r.timestamp) AS year', 'MONTH(r.timestamp) AS month', 'SUM(r.price) AS total_price', 'COUNT(r.id) AS count')
+            ->where('r.User = :userId')
+            ->andWhere('r.timestamp > :oneYearAgo')
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'ASC')
+            ->addOrderBy('month', 'DESC')
+            ->setParameter('userId', $userId)
+            ->setParameter('oneYearAgo', new \DateTime('-1 year'));
 
         return $qb->getQuery()->getResult();
     }
