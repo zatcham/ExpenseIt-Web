@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Department;
 use App\Entity\Reciept;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -48,8 +49,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::section('Users');
         yield MenuItem::linkToCrud('Users', 'fas fa-list', User::class);
-        yield MenuItem::section('');
+        yield MenuItem::section('Departments');
+        yield MenuItem::linkToCrud('Departments', 'fas fa-list', Department::class);
 //        yield MenuItem::linkToCrud('Reciept', 'fas fa-list', Reciept::class);
+        // Blank section for spacing
+        yield MenuItem::section('');
         yield MenuItem::linkToRoute('Return to User View', 'fa fa-arrow-left', 'app_home');
     }
 }
