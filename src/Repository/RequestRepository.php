@@ -29,7 +29,7 @@ class RequestRepository extends ServiceEntityRepository
             ->andWhere('r.timestamp > :oneYearAgo')
             ->groupBy('year', 'month')
             ->orderBy('year', 'ASC')
-            ->addOrderBy('month', 'DESC')
+            ->addOrderBy('month', 'ASC')
             ->setParameter('deptId', $deptId)
             ->setParameter('oneYearAgo', new \DateTime('-1 year'));
 
@@ -44,7 +44,7 @@ class RequestRepository extends ServiceEntityRepository
             ->andWhere('r.timestamp > :oneYearAgo')
             ->groupBy('year', 'week')
             ->orderBy('year', 'ASC')
-            ->addOrderBy('week', 'DESC')
+            ->addOrderBy('week', 'ASC')
             ->setParameter('userId', $userId)
             ->setParameter('oneYearAgo', new \DateTime('-1 year'));
 

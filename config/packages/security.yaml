@@ -60,6 +60,10 @@ security:
         - { path: ^/logout, roles: PUBLIC_ACCESS }
         - { path: ^/2fa, roles: IS_AUTHENTICATED_2FA_IN_PROGRESS}
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/requests, roles: ROLE_USER }
+        - { path: ^/approve, roles: ROLE_USER }
+        - { path: ^/home, roles: ROLE_USER }
+        - { path: ^/data, roles: ROLE_USER }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
