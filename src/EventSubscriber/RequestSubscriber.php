@@ -31,11 +31,16 @@ class RequestSubscriber implements EventSubscriberInterface
         $uow = $event->getObjectManager()->getUnitOfWork();
         $changes = $uow->getEntityChangeSet($entity);
 
+        // hmm
+        $user = $request->getUser();
+
+        // Do we need to log notifs sent?
+
         // This seems to be working
         if (array_key_exists('status', $changes)) {
             $email = (new TemplatedEmail())
                 ->from(new Address('app@expenseit.tech', 'ExpenseIt'))
-                ->to('me@zachm.uk')
+                ->to($user->getEmail())
                 ->subject('An update has been made to your request')
                 ->htmlTemplate('emails/notify_req_update.html.twig')
                 ->context([
