@@ -27,8 +27,11 @@ class UserSubscriber implements EventSubscriberInterface
 
     public function beforeEntityPersisted(BeforeEntityPersistedEvent $event): void {
         $user = $event->getEntityInstance();
-        $this->generateAndSendPwd($user);
-        $this->setCompany($user);
+        if ($event->getEntityInstance() instanceof User) {
+            $this->generateAndSendPwd($user);
+            $this->setCompany($user);
+        }
+
     }
 
     private function setCompany(User $user): void {

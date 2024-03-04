@@ -2,7 +2,9 @@
 
 namespace App\Controller\Data;
 
+use App\Entity\Department;
 use App\Repository\RequestRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,5 +36,6 @@ class DataController extends AbstractController // Rename TODO
         return $this->json($data);
 
     }
+
 
 }
