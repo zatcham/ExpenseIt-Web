@@ -32,4 +32,25 @@ class ApprovalController extends AbstractController
         ]);
     }
 
+    #[Route('/approve/history', name: 'approve_history')]
+    public function history(Request $request) : Response {
+
+        $requests = array();
+        $user = $this->getUser();
+        if (in_array('ROLE_FINANCE_ADMIN', $user->getRoles())) {
+            foreach($user->getCompany()->getDepartments() as $department) {
+                foreach($department->getRequests() as $request) {
+                    $requests[] = $request;
+                }
+            }
+        } else {
+            $requests = $this->getUser()->getDepartment()->getRequests();
+        }
+
+        $this->denyAccessUnlessGranted('ROLE_APPROVAL_RW');
+        return $this->render('dashboard/approve/history.html.twig', [
+            'requests' => $requests,
+        ]);
+    }
+
 }
