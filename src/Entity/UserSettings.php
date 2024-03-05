@@ -22,6 +22,15 @@ class UserSettings
     #[ORM\Column]
     private ?bool $NotifyOnAccept = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $NotifyOnUpdate = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $PushNotifs = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $MobileAccess = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,6 +56,42 @@ class UserSettings
     public function setNotifyOnAccept(bool $NotifyOnAccept): static
     {
         $this->NotifyOnAccept = $NotifyOnAccept;
+
+        return $this;
+    }
+
+    public function getNotifyOnUpdate(): ?bool
+    {
+        return $this->NotifyOnUpdate;
+    }
+
+    public function setNotifyOnUpdate(?bool $NotifyOnUpdate): static
+    {
+        $this->NotifyOnUpdate = $NotifyOnUpdate;
+
+        return $this;
+    }
+
+    public function getPushNotifs(): ?bool
+    {
+        return $this->PushNotifs;
+    }
+
+    public function setPushNotifs(?bool $PushNotifs): static
+    {
+        $this->PushNotifs = $PushNotifs;
+
+        return $this;
+    }
+
+    public function getMobileAccess(): ?bool
+    {
+        return $this->MobileAccess;
+    }
+
+    public function setMobileAccess(?bool $MobileAccess): static
+    {
+        $this->MobileAccess = $MobileAccess;
 
         return $this;
     }
