@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\CompaniesRepository;
+use DH\Auditor\Provider\Doctrine\Auditing\Annotation\Auditable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompaniesRepository::class)]
+#[Auditable]
 class Companies
 {
     #[ORM\Id]

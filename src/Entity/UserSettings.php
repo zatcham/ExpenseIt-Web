@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UserSettingsRepository;
+use DH\Auditor\Provider\Doctrine\Auditing\Annotation\Auditable;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserSettingsRepository::class)]
+#[Auditable]
 class UserSettings
 {
     #[ORM\Id]
