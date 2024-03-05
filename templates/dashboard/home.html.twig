@@ -548,9 +548,35 @@
                     },
                 });
             });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/countup@1.8.2/countUp.js" referrerpolicy="no-referrer"></script>
+    <script>
+        // Count up JS code
+        const options = {
+            decimal: '.',
+            decimalPlaces: 2,
+            prefix: '£',
+            separator: ',',
+            startVal: 0,
+            suffix: '',
+            useEasing: true,
+            useGrouping: true,
+        };
+        window.onload = function() {
+            let daily_exp = new CountUp('daily-exp-gbp', 0, {{ daily_exp_gbp }}, 2, 3, options);
+            if (!daily_exp.error) {
+                daily_exp.start();
+            } else {
+                console.error(daily_exp.error);
+            }
 
-
-
+            let daily_sub = new CountUp('daily-sub-count', 0, {{ daily_sub_count }}, 0, 3);
+            if (!daily_sub.error) {
+                daily_sub.start();
+            } else {
+                console.error(daily_sub.error);
+            }
+        }
     </script>
 
 {% endblock %}
