@@ -26,6 +26,11 @@ services:
     App\EventSubscriber\UserSubscriber:
         tags:
             - { name: kernel.event_subscriber }
+    App\EventListener\UserUpdateListener:
+        tags:
+            - name: 'doctrine.orm.entity_listener'
+              event: 'preUpdate'
+              entity: 'App\Entity\User'
     App\Security\Voter\RequestVoter:
         tags:
             - { name: security.voter }
