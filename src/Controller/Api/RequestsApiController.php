@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Receipt;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,14 +40,17 @@ class RequestsApiController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $user = $this->getUser();
 //        $timestamp = date('c', time());
-        $timestamp = new \DateTime('now');
+        if (!isset($data['timestamp'])) {
+            $timestamp = new \DateTime('now'); // Check if app has sent timestamp; if not assume current time
+        } else {
+            $timestamp = DateTime::createFromFormat('Y-m-d H:i', $data['timestamp']); // Convert from 2023-03-05 14:35 to DateTime obj
+        }
         $timestamp->format(DateTimeInterface::ATOM);
 
-        if (!isset($data['merchant'], $data['cost'])) {
+
+        if (!isset($data['merchant'], $data['cost'])) { // Timestamp isn't necessary...
             return $this->json(['message' => 'Invalid Data'], Response::HTTP_BAD_REQUEST);
         }
-
-//        $rq = $user->getRequests();
 
         $rq = new \App\Entity\Request();
         // Status assumed to be pending?
