@@ -26694,4 +26694,8 @@ pre[class*="language-"] {
   }
 }
 
+.hr-visible {
+  border-top: 1px solid !important;
+}
+
 /*# sourceMappingURL=dashboard-free.css.map */
