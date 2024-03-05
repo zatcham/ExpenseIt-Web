@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\Api\RequestsApiController;
+use App\Controller\Data\DataController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,8 +15,6 @@ class HomeController extends AbstractController {
     #[Route('/home', name: 'app_home')]
     public function index(RequestsController $rq): Response {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
-
-
 
         return $this->render('dashboard/home.html.twig', [
             'daily_exp_gbp' => $rq->getDailyExpenditure(),

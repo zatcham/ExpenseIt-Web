@@ -37,5 +37,42 @@ class DataController extends AbstractController // Rename TODO
 
     }
 
+    #[Route('/data/percent/user-past-week', name: 'data_percent_past-week')]
+    public function getUserPercentPastWeek(RequestRepository $requestRepository) : Response
+    {
+        if (!$this->getUser()) {
+            return $this->json(['message' => 'Access Denied'], 403);
+        }
+        $userId = $this->getUser()->getId();
+        $results = $requestRepository->getPastWeekForUser($userId);
+        $percentDiff = $pastWeek = $currentWeek = 0;
+        $count = 0;
+        foreach($results as $result) {
+            if ($count == 0) { // TODO : Fix this in case it breaks
+                $pastWeek = $result['total_price'];
+                $count++;
+            } elseif ($count == 1) {
+                $currentWeek = $result['total_price'];
+                $count++;
+            }
+
+            if ($pastWeek !== 0 && $currentWeek !== 0) {
+                $percentDiff = (($currentWeek - $pastWeek) / $pastWeek) * 100;
+            } else {
+                $percentDiff = 0;
+           }
+        }
+        $percentDiff = round($percentDiff);
+
+        return $this->json($percentDiff);
+    }
+
+    #[Route('/data/percent/user-all', name: 'data_percent_all')]
+    public function getAllDashPercent(RequestRepository $requestRepository) : Response {
+        $percents = array();
+        return $this->json($percents);
+    }
+
+
 
 }

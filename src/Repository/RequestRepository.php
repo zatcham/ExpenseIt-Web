@@ -51,6 +51,28 @@ class RequestRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getPastWeekForUser($userId) {
+        $qb = $this->createQueryBuilder('r')
+            ->select(
+                'YEAR(r.timestamp) AS year',
+                'WEEK(r.timestamp) AS week',
+                'SUM(r.price) AS total_price',
+                'COUNT(r.id) AS count',
+                'AVG(CASE WHEN r.timestamp > :oneWeekAgo THEN r.price ELSE 0 END) AS current_week_avg_price',
+                'AVG(CASE WHEN r.timestamp <= :oneWeekAgo THEN r.price ELSE 0 END) AS past_week_avg_price'
+            )
+            ->where('r.User = :userId')
+            ->andWhere('r.timestamp > :oneWeekAgo') // Only consider data from the current week
+            ->groupBy('year', 'week')
+            ->orderBy('year', 'ASC')
+            ->addOrderBy('week', 'ASC')
+            ->setParameter('userId', $userId)
+            ->setParameter('oneWeekAgo', new \DateTime('-2 week'));
+
+        return $qb->getQuery()->getResult();
+
+    }
+
 //    /**
 //     * @return Request[] Returns an array of Request objects
 //     */
