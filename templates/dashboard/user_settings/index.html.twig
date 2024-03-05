@@ -106,19 +106,21 @@
                             <div class="form-check form-switch ps-0">
                                 <input class="form-check-input ms-auto" type="checkbox" id="notifyOnAcceptToggle"
                                        {% if app.user.userSettings.notifyOnAccept == 1 %} checked {% endif %} data-setting="notifyOnAccept">
-                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="notifyOnAcceptToggle">Notify me when my request is accepted</label>
+                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="notifyOnAcceptToggle">When my request is accepted</label>
                             </div>
                         </li>
                         <li class="list-group-item border-0 px-0">
                             <div class="form-check form-switch ps-0">
-                                <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault1">
-                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault1">Notify me when there is an update to my request</label>
+                                <input class="form-check-input ms-auto" type="checkbox" id="notifyOnUpdateToggle"
+                                {% if app.user.userSettings.notifyOnUpdate == 1 %} checked {% endif %} data-setting="notifyOnUpdate">
+                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="notifyOnUpdateToggle">When my request is updated</label>
                             </div>
                         </li>
                         <li class="list-group-item border-0 px-0">
                             <div class="form-check form-switch ps-0">
-                                <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault2" checked>
-                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault2">Email me sometimes</label>
+                                <input class="form-check-input ms-auto" type="checkbox" id="pushNotifsToggle"
+                                {% if app.user.userSettings.pushNotifs == 1 %} checked {% endif %} data-setting="pushNotifs">
+                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="pushNotifsToggle">Push Notifications</label>
                             </div>
                         </li>
                     </ul>
@@ -126,20 +128,9 @@
                     <ul class="list-group">
                         <li class="list-group-item border-0 px-0">
                             <div class="form-check form-switch ps-0">
-                                <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault3">
-                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault3">... TODO </label>
-                            </div>
-                        </li>
-                        <li class="list-group-item border-0 px-0">
-                            <div class="form-check form-switch ps-0">
-                                <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault4" checked>
-                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault4">...</label>
-                            </div>
-                        </li>
-                        <li class="list-group-item border-0 px-0 pb-0">
-                            <div class="form-check form-switch ps-0">
-                                <input class="form-check-input ms-auto" type="checkbox" id="flexSwitchCheckDefault5">
-                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="flexSwitchCheckDefault5">...</label>
+                                <input class="form-check-input ms-auto" type="checkbox" id="mobileAccessToggle"
+                                {% if app.user.userSettings.mobileAccess == 1 %} checked {% endif %} data-setting="mobileAccess">
+                                <label class="form-check-label text-body ms-3 text-truncate w-80 mb-0" for="mobileAccessToggle">Allow mobile app access</label>
                             </div>
                         </li>
                     </ul>
