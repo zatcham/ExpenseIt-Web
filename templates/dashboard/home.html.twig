@@ -240,7 +240,7 @@
                                 <h6>Requests</h6>
                                 <p class="text-sm mb-0">
                                     <i class="fa fa-check text-info" aria-hidden="true"></i>
-                                    <span class="font-weight-bold ms-1">{{ app.user.requests|filter(request => request.active == true)|length }} pending requests</span>
+                                    <span class="font-weight-bold ms-1">{{ app.user.requests|filter(request => request.active == true and request.status == 'pending')|length }} pending requests</span>
                                 </p>
                             </div>
 {#                            <div class="col-lg-6 col-5 my-auto text-end">#}
@@ -269,8 +269,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for request in app.user.requests|filter(request => request.active == true) %}
-
+                                {% for request in app.user.requests|filter(request => request.active == true and request.status == 'pending') %}
                                     <tr>
                                         <td>
                                             <div class="d-flex px-2 py-1">
@@ -289,7 +288,6 @@
 {#                                            <h6 class="mb-0 text-sm">TODO</h6>#}
 {#                                        </td>#}
                                     </tr>
-
                                 {% endfor %}
                                 </tbody>
                             </table>
