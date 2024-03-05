@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\ReceiptRepository;
+use DH\Auditor\Provider\Doctrine\Auditing\Annotation\Auditable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReceiptRepository::class)]
+#[Auditable]
 class Receipt
 {
     #[ORM\Id]

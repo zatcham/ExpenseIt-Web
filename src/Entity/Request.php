@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RequestRepository;
+use DH\Auditor\Provider\Doctrine\Auditing\Annotation\Auditable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -11,6 +12,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
+#[Auditable]
 class Request
 {
     #[ORM\Id]
