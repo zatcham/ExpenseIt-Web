@@ -20,7 +20,7 @@
                         {{ app.user.firstname }} {{ app.user.lastname }}
                     </h5>
                     <p class="mb-0 font-weight-bold text-sm">
-                        {{ app.user.companyName }}
+                        {{ app.user.companyName }} | {{ app.user.jobTitle }}
                     </p>
                 </div>
             </div>
@@ -159,6 +159,7 @@
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Mobile:</strong> &nbsp;
                             {{ app.user.mobileNumber }}</li>
                         <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Email:</strong> &nbsp;{{ app.user.email }}</li>
+                        <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Department:</strong> &nbsp;{{ app.user.department.name }}</li>
                     </ul>
                 </div>
             </div>
