@@ -3,6 +3,7 @@
 namespace App\Controller\Budget;
 
 use App\Entity\Budget;
+use App\Form\BudgetNewType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,6 +35,23 @@ class BudgetController extends AbstractController
 
         return $this->render('dashboard/budget/detail.html.twig', [
             'budget' => $budget,
+        ]);
+    }
+
+    #[Route('/budget/new', name: 'budget_new')]
+    public function new(Request $request, EntityManagerInterface $em) : Response {
+        $user = $this->getUser();
+        $form = $this->createForm(BudgetNewType::class, null, [
+            'user' => $user
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+        }
+
+        return $this->render('dashboard/budget/new.html.twig', [
+            'budgetForm' => $form
         ]);
     }
 
