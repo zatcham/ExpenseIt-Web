@@ -2,6 +2,7 @@
 
 namespace App\Controller\Auth;
 
+use App\Controller\HomeController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +18,9 @@ class LoginController extends AbstractController
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
+        if ($this->getUser()) {
+            return $this->redirect('/home', 302);
+        }
         return $this->render('auth/login.html.twig', [
             'last_username' => $lastUsername,
             'error'         => $error,
