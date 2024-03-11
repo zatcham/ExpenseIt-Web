@@ -18,11 +18,14 @@
                         {% for message in app.flashes('success') %}
                             <div class="alert alert-success" role="alert">{{ message }}</div>
                         {% endfor %}
+                        {% if not budgetForm.vars.valid %} {# TODO : More error handling work #}
+                            <div class="alert alert-danger bg-gradient-faded-warning" role="alert">{{ form_errors(budgetForm.name) }}</div>
+                        {% endif %}
                         {{ form_errors(budgetForm) }}
                         {{ form_start(budgetForm) }}
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
+                                <div class="form-group has-danger">
                                     <label for="budget_new_name" class="form-control-label">Budget Name: </label>
                                     {{ form_widget(budgetForm.name, {'attr': {'class': 'form-control'}}) }}
                                 </div>

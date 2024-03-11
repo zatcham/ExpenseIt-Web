@@ -47,7 +47,14 @@ class BudgetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $budget = new Budget();
+            $budget->setName($form->get('name')->getData());
+            $budget->setTotalBudget($form->get('total_budget')->getData());
+            $budget->setPerEmployeeBudget($form->get('per_employee_budget')->getData());
+            $budget->setDepartment($form->get('department')->getData());
+            $em->persist($budget);
+            $em->flush();
+            $this->addFlash('success', 'Created new budget "' . $budget->getName() .'" successfully');
         }
 
         return $this->render('dashboard/budget/new.html.twig', [

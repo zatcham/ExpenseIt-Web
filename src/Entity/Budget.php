@@ -5,9 +5,14 @@ namespace App\Entity;
 use App\Repository\BudgetRepository;
 use DH\Auditor\Provider\Doctrine\Auditing\Annotation\Auditable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: BudgetRepository::class)]
 #[Auditable]
+#[UniqueEntity(
+    fields: ['name', 'department'],
+    message: 'A budget with this name already exists within this department.'
+)]
 class Budget
 {
     #[ORM\Id]
