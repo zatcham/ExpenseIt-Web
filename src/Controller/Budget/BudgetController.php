@@ -3,8 +3,10 @@
 namespace App\Controller\Budget;
 
 use App\Entity\Budget;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,14 +20,22 @@ class BudgetController extends AbstractController
 
 
     #[Route('/budget/view', name: 'budget_view')]
-    public function index(): Response
+    public function view(): Response
     {
         return $this->render('dashboard/budget/view.html.twig', [
-            'controller_name' => 'BudgetController',
             'budgets' => $this->getAllBudgets()
         ]);
     }
 
+    #[Route('/budget/detail/{id}', name: 'budget_detail')]
+    public function detail(Request $request, string $id, EntityManagerInterface $em) : Response {
+        $budget = $em->getRepository(Budget::class)->find($id);
+        $this->denyAccessUnlessGranted('view_budget', $budget);
+
+        return $this->render('dashboard/budget/view.html.twig', [
+
+        ]);
+    }
 
     private function getAllBudgets() : array {
         // Working, TODO : Add role-based access
