@@ -1,0 +1,67 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}New Budget{% endblock %}
+
+{% block content %}
+    <div class="container-fluid py-4">
+        <div class="row mt-4">
+            <div class="col-sm-6 col-lg-12">
+                <div class="card h-100">
+                    <div class="card-header pb-0 p-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="mb-0">New Budget</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid py-4">
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success" role="alert">{{ message }}</div>
+                        {% endfor %}
+                        {% if not budgetForm.vars.valid %} {# TODO : More error handling work #}
+                            <div class="alert alert-danger bg-gradient-faded-warning" role="alert">{{ form_errors(budgetForm.name) }}</div>
+                        {% endif %}
+                        {{ form_errors(budgetForm) }}
+                        {{ form_start(budgetForm) }}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group has-danger">
+                                    <label for="budget_new_name" class="form-control-label">Budget Name: </label>
+                                    {{ form_widget(budgetForm.name, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="budget_new_total_budget" class="form-control-label">Total Budget: </label>
+                                    {{ form_widget(budgetForm.total_budget, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="budget_new_per_employee_budget" class="form-control-label">Per Employee Limit: </label>
+                                    {{ form_widget(budgetForm.per_employee_budget, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="budget_new_department" class="form-control-label">Department: </label>
+                                    {{ form_widget(budgetForm.department, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Add New Budget</button>
+                        </div>
+                        {{ form_end(budgetForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

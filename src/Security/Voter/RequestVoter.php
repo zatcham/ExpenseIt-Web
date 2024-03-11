@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Request;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,6 +12,8 @@ class RequestVoter extends Voter
 {
     public const EDIT = 'POST_EDIT';
     public const VIEW = 'POST_VIEW';
+
+    public function __construct(private Security $security) {}
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -37,9 +40,15 @@ class RequestVoter extends Voter
             return false;
         }
 
+        // Ensure super admin has access
+        if ($this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            // TODO : Add verification that super admin is of that company, unless is expenseit admin
+            return true;
+        }
+
         switch($attribute) {
             case 'view_request':
-                return $subject->getUser() === $user || (in_array('ROLE_APPROVAL_RW', $user->getRoles()) && $user->getCompany() === $subject->getUser()->getCompany());
+                return $subject->getUser() === $user || ($this->security->isGranted('ROLE_APPROVAL_RW') && $user->getCompany() === $subject->getUser()->getCompany());
         }
 
 //        if ($subject->getUser() === $user) {
