@@ -30,10 +30,10 @@
                             </div>
                             <div class="d-flex">
                                 <div class="dropdown d-inline">
-                                    <a href="javascript:;" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" id="navbarDropdownMenuLink2" aria-expanded="false">
+                                    <a href="javascript:;" class="btn btn-outline-dark dropdown-toggle" data-bs-toggle="dropdown" id="filterDropdown" aria-expanded="false">
                                         Filters
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-lg-start px-2 py-3" aria-labelledby="navbarDropdownMenuLink2" style="">
+                                    <ul class="dropdown-menu dropdown-menu-lg-start px-2 py-3" aria-labelledby="filterDropdown" style="">
                                         <li><a class="dropdown-item border-radius-md" href="javascript:;">Status: Active</a></li>
                                         <li><a class="dropdown-item border-radius-md" href="javascript:;">Status: Paused</a></li>
                                         <li><a class="dropdown-item border-radius-md" href="javascript:;">Status: Canceled</a></li>
@@ -43,10 +43,22 @@
                                         <li><a class="dropdown-item border-radius-md text-danger" href="javascript:;">Remove Filter</a></li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-icon btn-outline-dark ms-2 export" data-type="csv" type="button">
-                                    <span class="btn-inner--icon"><i class="ni ni-archive-2"></i></span>
-                                    <span class="btn-inner--text">Export CSV</span>
-                                </button>
+                                <div class="dropdown d-inline ms-2">
+                                    <a href="javascript:;" class="btn btn-outline-dark dropdown-toggle export" data-bs-toggle="dropdown" id="exportDropdown" aria-expanded="false">
+                                        Export
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-lg-start px-2 py-3" aria-labelledby="exportDropdown" style="">
+                                        <li><a class="dropdown-item border-radius-md" href="{{ path('budget_download_xlsx') }}">Export XLSX</a></li>
+                                        <li><a class="dropdown-item border-radius-md" href="{{ path('budget_download_csv') }}">Export CSV</a></li>
+{#                                        <li>#}
+{#                                            <hr class="horizontal dark my-2">#}
+{#                                        </li>#}
+                                    </ul>
+                                </div>
+{#                                <button class="btn btn-icon btn-outline-dark ms-2 export" data-type="csv" type="button">#}
+{#                                    <span class="btn-inner--icon"><i class="ni ni-archive-2"></i></span>#}
+{#                                    <span class="btn-inner--text">Export CSV</span>#}
+{#                                </button>#}
                             </div>
                         </div>
                         <ul class="list-group">

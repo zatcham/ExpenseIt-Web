@@ -6,9 +6,13 @@ use App\Entity\Budget;
 use App\Form\BudgetNewType;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BudgetController extends AbstractController
@@ -62,6 +66,28 @@ class BudgetController extends AbstractController
         ]);
     }
 
+    // Downloads for export, TODO : S3 upload? Add Time?
+    #[Route('/budget/download/xlsx', name: 'budget_download_xlsx')]
+    public function downloadXlsx() : BinaryFileResponse {
+        $filePath = $this->exportBudgetsAsXlsx($this->getAllBudgets(), $this->getUser()->getCompany()->getName());
+        $fileName = basename($filePath);
+        // Need to get clean file name as contentDeposition will not accept / or \
+        $safeFilename = preg_replace('/[^a-zA-Z0-9-_\.]/', '', $fileName);
+        $response = new BinaryFileResponse($filePath);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $safeFilename);
+        return $response;
+    }
+    // Same as XLSX
+    #[Route('/budget/download/csv', name: 'budget_download_csv')]
+    public function downloadCsv() : BinaryFileResponse {
+        $filePath = $this->exportBudgetsAsCsv($this->getAllBudgets(), $this->getUser()->getCompany()->getName());
+        $fileName = basename($filePath);
+        $safeFilename = preg_replace('/[^a-zA-Z0-9-_\.]/', '', $fileName);
+        $response = new BinaryFileResponse($filePath);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $safeFilename);
+        return $response;
+    }
+
     private function getAllBudgets() : array {
         // Working, TODO : Add role-based access
 //        $objects = $this->managerRegistry->getRepository(Budget::class)->findAll();
@@ -83,5 +109,43 @@ class BudgetController extends AbstractController
         }
 
         return $deptBudgets;
+    }
+
+    private function exportBudgetsAsXlsx(array $budgets, string $companyName) : string {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $timestamp = date('Y-m-d');
+        $filename = "files/exports/$companyName-budgets-$timestamp.xlsx";
+        $titles = ['Department', 'Budget Name', 'Total', 'Per Employee'];
+
+        $sheet->fromArray($titles, null, 'A1');
+        $rowNo = 2;
+        foreach($budgets as $budget) {
+            unset($budget['status'], $budget['id']);
+            $data = [$budget['department_name'], $budget['name'], $budget['total'], $budget['per_employee']];
+            $sheet->fromArray($data, null, "A$rowNo");
+            $rowNo++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filename);
+        return $filename;
+    }
+
+    private function exportBudgetsAsCsv(array $budgets, string $companyName) : string {
+        $timestamp = date('Y-m-d');
+        $filename = "files/exports/$companyName-budgets-$timestamp.csv";
+        $titles = ['Department', 'Budget Name', 'Total', 'Per Employee'];
+        $file = fopen($filename, 'w');
+
+        fputcsv($file, $titles);
+        foreach($budgets as $budget) {
+            unset($budget['status'], $budget['id']);
+            $data = [$budget['department_name'], $budget['name'], $budget['total'], $budget['per_employee']];
+            fputcsv($file, $data);
+
+        }
+        fclose($file);
+        return $filename;
     }
 }
