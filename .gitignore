@@ -27,3 +27,8 @@
 
 ### PHPStorm edits
 .idea
+
+## ZM Edits
+*.log
+*.xlsx
+*.csv
