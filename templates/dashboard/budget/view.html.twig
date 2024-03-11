@@ -71,8 +71,8 @@
                                             <td>{{ budget.name }}</td>
                                             <td>{{ budget.department_name }}</td>
                                             <td>{{ budget.status }}</td>
-                                            <td>{{ budget.total }}</td>
-                                            <td>{{ budget.per_employee }}</td>
+                                            <td>£{{ budget.total }}</td>
+                                            <td>{{ budget.per_employee }}</td> {# TODO : Add currency handling, all is assumed to be gbp #}
                                             <td><a href="/budget/detail/{{ budget.id }}">Go To</a></td>
                                         </tr>
                                     {% endfor %}

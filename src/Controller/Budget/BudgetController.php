@@ -32,8 +32,8 @@ class BudgetController extends AbstractController
         $budget = $em->getRepository(Budget::class)->find($id);
         $this->denyAccessUnlessGranted('view_budget', $budget);
 
-        return $this->render('dashboard/budget/view.html.twig', [
-
+        return $this->render('dashboard/budget/detail.html.twig', [
+            'budget' => $budget,
         ]);
     }
 
