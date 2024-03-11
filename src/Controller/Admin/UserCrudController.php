@@ -4,11 +4,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
+
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
@@ -19,19 +19,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityPersistedEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Event\BeforeEntityUpdatedEvent;
-use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
-use Symfony\Component\Security\Core\Security;
-use Doctrine\Common\Collections\Criteria;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-
-
-
+use Symfony\Bundle\SecurityBundle\Security;
 
 class UserCrudController extends AbstractCrudController
 {
