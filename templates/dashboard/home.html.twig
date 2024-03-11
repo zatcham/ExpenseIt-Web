@@ -455,7 +455,7 @@
         fetch('/data/user/weekly')
             .then(response => response.json())
             .then(data => {
-                const labels = data.map(item => `${item.year}-${item.week}`);
+                const labels = data.map(item => `w/c ${item.week_commencing}`);
                 const dataset = data.map(item => item.total_price);
                 const count = data.map(item => item.count);
 
@@ -475,19 +475,18 @@
                             data: dataset,
                             maxBarThickness: 6
 
+                        }, {
+                            label: "Request Count",
+                            tension: 0.4,
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            borderColor: "#3A416F",
+                            borderWidth: 3,
+                            backgroundColor: gradientStroke2,
+                            fill: true,
+                            data: count,
+                            maxBarThickness: 6
                         },
-                            {
-                                label: "Request Count",
-                                tension: 0.4,
-                                borderWidth: 0,
-                                pointRadius: 0,
-                                borderColor: "#3A416F",
-                                borderWidth: 3,
-                                backgroundColor: gradientStroke2,
-                                fill: true,
-                                data: count,
-                                maxBarThickness: 6
-                            },
 
                         ],
                     },
@@ -542,6 +541,8 @@
                                         style: 'normal',
                                         lineHeight: 2
                                     },
+                                    maxRotation: 90,
+                                    minRotation: 90,
                                 }
                             },
                         },
