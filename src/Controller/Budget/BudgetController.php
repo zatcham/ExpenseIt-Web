@@ -31,7 +31,6 @@ class BudgetController extends AbstractController
         // Working, TODO : Add role-based access
 //        $objects = $this->managerRegistry->getRepository(Budget::class)->findAll();
         $company = $this->getUser()->getCompany();
-
         $deptBudgets = [];
 
         // Iterate all departments in company
@@ -39,7 +38,11 @@ class BudgetController extends AbstractController
             // Get all budgets of department
             foreach($department->getBudgets() as $budgets) {
                 $b['id'] = $budgets->getId();
-                $b['department_id'] = $budgets->getDepartment()->getId();
+                $b['department_name'] = $budgets->getDepartment()->getName();
+                $b['name'] = $budgets->getName();
+                $b['total'] = $budgets->getTotalBudget();
+                $b['per_employee'] = $budgets->getPerEmployeeBudget(); // TODO
+                $b['status'] = 'none'; // TODO
                 $deptBudgets[] = $b;
             }
         }
