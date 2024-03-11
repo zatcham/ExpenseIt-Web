@@ -10,14 +10,14 @@
                     <div class="card-header pb-0 p-3">
                         <div class="row">
                             <div class="col-md-6">
-                                <h6 class="mb-0">Recent Activity {{ dump(audits) }}</h6>
+                                <h6 class="mb-0">Recent Activity</h6>
                                 <hr class="hr-visible"/>
                             </div>
                         </div>
                     </div>
                     <div class="card-body p-3">
                         <ul class="list-group">
-                            {% for audit in audits %}
+                            {% for audit in user_audits %}
                                     <li class="list-group-item border-0 justify-content-between ps-0 pb-0 border-radius-lg">
                                         <div class="d-flex">
                                             <div class="d-flex align-items-center">
@@ -27,15 +27,18 @@
                                                     </button>
 
                                                 <div class="d-flex flex-column">
-                                                    <a class="mb-1 text-dark text-sm text-decoration-underline" href="">{{ audit.type|capitalize }}</a>
+                                                    <a class="mb-1 text-dark text-sm text-decoration-underline" href="">{{ audit.type|capitalize }} User</a>
                                                     <span class="text-xs">IP: {{ audit.ip }} | Timestamp: {{ audit.createdAt|date('Y-m-d H:i:s') }}</span>
                                                 </div>
                                                 <ul>
                                                     <li>
                                                         {% for field, change in audit.diffs %}
-                                                            Changed Item: {{ field }}
-                                                    <li>Original: {{ change.old }} | New: {{ change.new }}</li>
+                                                            Changed Item: {{ field|replace({'_': ' '})|title }}
+                                                        {% if field != 'password' %}
+                                                            <li>Original: {{ change.old }} | New: {{ change.new }}</li>
+                                                        {% endif %}
                                                         {% endfor %}
+
                                                     </li>
                                                 </ul>
                                             </div>

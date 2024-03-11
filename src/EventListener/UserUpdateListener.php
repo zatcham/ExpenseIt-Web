@@ -26,7 +26,7 @@ class UserUpdateListener
 
 //        if ($user->getEmail() !== $original['email'] || $user->getFirstname() !== $original['firstname']) {
             $email = (new TemplatedEmail())
-            ->from('app@expenseit.tech')
+            ->from('app@expenseit.tech','ExpenseIt')
             ->to($user->getEmail())
             ->subject('Your ExpenseIt Account')
             ->htmlTemplate('emails/notify_req_update.html.twig')

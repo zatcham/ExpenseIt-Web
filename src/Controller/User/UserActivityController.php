@@ -24,8 +24,8 @@ class UserActivityController extends AbstractController
         ])->execute();
 
         return $this->render('dashboard/user_settings/activity.html.twig', [
-            'controller_name' => 'UserActivityController',
-            'audits' => $audits,
+            'user_audits' => $audits,
         ]);
     }
+
 }
