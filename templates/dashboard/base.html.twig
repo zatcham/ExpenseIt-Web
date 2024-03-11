@@ -21,6 +21,8 @@
     <!-- CSS Files -->
     <link href="{{ asset('css/dashboard.css') }}" rel="stylesheet" />
     <link rel="icon" href="/images/logo/expenseit.svg" type="image/svg+xml">
+    {% block css %}
+    {% endblock %}
 
 
 </head>
@@ -102,6 +104,23 @@
                 </li>
                 <hr/>
 
+
+            {% endif %}
+
+            {% if is_granted('ROLE_USER') %} {# TODO : Change to ROLE_BUDGET_RW #}
+                <li class="nav-item mt-3">
+                    <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Budgets </h6>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'budget_view' %}active{% endif %}" href="{{ path('budget_view') }}">
+                        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">View</span>
+                    </a>
+                </li>
+
+                <hr/>
 
             {% endif %}
 
