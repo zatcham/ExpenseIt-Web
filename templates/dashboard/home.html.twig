@@ -376,10 +376,10 @@
 
         var ctx = document.getElementById("chart-bars").getContext("2d");
 
-        // Get API for department monthly
-        fetch('/data/dept/monthly')
-            .then(response => response.json())
-            .then(data => {
+        async function renderChart() {
+            try {
+                const response = await fetch('/data/dept/monthly');
+                const data = await response.json();
                 const labels = data.map(item => `${item.year}-${item.month}`);
                 const dataset = data.map(item => item.total_price);
 
@@ -435,7 +435,13 @@
                         },
                     },
                 });
-            });
+
+            } catch (error) {
+                console.error('Error fetching monthly data: ', error);
+            }
+        }
+
+        renderChart();
 
         // User monthly chart
         var ctx2 = document.getElementById("chart-line").getContext("2d");
