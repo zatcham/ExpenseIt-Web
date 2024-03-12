@@ -3,6 +3,7 @@
 namespace App\Controller\Requests;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\PersistentCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,9 +60,9 @@ class ApprovalController extends AbstractController
     }
 
     /**
-     * @return array
+     * @return PersistentCollection
      */
-    private function getRequests(): array {
+    private function getRequests(): PersistentCollection {
         $requests = array();
         $user = $this->getUser();
         if (in_array('ROLE_FINANCE_ADMIN', $user->getRoles())) {
@@ -71,7 +72,7 @@ class ApprovalController extends AbstractController
                 }
             }
         } else {
-            $requests = $this->getUser()->getDepartment()->getRequests();
+            $requests = $user->getDepartment()->getRequests();
         }
 
         return $requests;
