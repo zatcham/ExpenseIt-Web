@@ -61,7 +61,7 @@
                                             Created by {{ request.user.firstname }} {{ request.user.lastname }}
                                         </li>
                                         <li>
-                                            Department: {{ request.department.name }}
+                                            Department: {% if request.department is not null %}{{ request.department.name }}{% else %}N/A{% endif %}
                                         </li>
                                         <li>
                                             Budget: Budget 1
