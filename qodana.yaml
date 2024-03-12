@@ -12,3 +12,11 @@ exclude:
       - bin
       - config
       - migrations
+  - name: PhpUndefinedClassInspection
+  - name: PhpUndefinedClassConstantInspection
+  - name: PhpUndefinedConstantInspection
+  - name: PhpUndefinedFunctionInspection
+  - name: PhpUndefinedMethodInspection
+  - name: PhpUndefinedFieldInspection
+  - name: PhpUndefinedNamespaceInspection
+  - name: PhpUndefinedVariableInspection
