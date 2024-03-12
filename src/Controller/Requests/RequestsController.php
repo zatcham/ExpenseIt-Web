@@ -26,7 +26,9 @@ class RequestsController extends AbstractController
     public function detail(Request $request, string $id, EntityManagerInterface $em) : Response {
         $req = $em->getRepository(AppRequest::class)->find($id);
         $this->denyAccessUnlessGranted('view_request', $req);
-        return $this->render('dashboard/requests/detail.html.twig');
+        return $this->render('dashboard/requests/detail.html.twig', [
+            'request' => $req,
+        ]);
 
     }
 
