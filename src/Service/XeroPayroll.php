@@ -67,12 +67,13 @@ class XeroPayroll
     }
 
     // Match Xero employee IDs to ExpenseIt IDs
-    public function syncXeroEmployees(): array{
+    public function syncXeroEmployees(): array {
+        $company = $this->security->getUser()->getCompany();
         $employees = $this->getEmployees();
         $new = [];
         foreach($employees as $employee) {
                 if ($employee['email']) {
-                    $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $employee['email']]);
+                    $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $employee['email'], 'company' => $company]);
                     if ($user) {
                         $new[] = [
                             'expEmployeeId' => $user->getId(),
