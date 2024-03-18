@@ -180,6 +180,14 @@
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Admin</h6>
             </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if app.request.attributes.get('_route') starts with 'integrate_home' %}active{% endif %}" href="{{ path('integrate_home') }}">
+                        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Integrations</span>
+                    </a>
+                </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ ea_url().setController('App\\Controller\\Admin\\UserCrudController') }}">
                     <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -422,11 +430,14 @@
 
 <script>
     var win = navigator.platform.indexOf('Win') > -1;
+
     if (win && document.querySelector('#sidenav-scrollbar')) {
-        var options = {
+        var sbOptions = {
             damping: '0.5'
         }
-        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), sbOptions);
+    } else {
+        Scrollbar.init(document.querySelector('#sidenav-main'));
     }
 </script>
 

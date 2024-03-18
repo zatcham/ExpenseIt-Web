@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<title>Hello ConnectionController!</title>
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    .alert {
+        position: relative;
+        padding: .75rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: .25rem;
+    }
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
+
+    <a href="{{ path('integrate_xero_connect') }}">Connect to Xero </a>
+    <br>
+    <a href="{{ path('integrate_xero_status') }}">Check Xero Token status</a>
+    <br>
+    <a href="{{ path('integrate_xero_token') }}">Get new Xero token</a>
+</div>
+{% endblock %}

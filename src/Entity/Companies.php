@@ -33,6 +33,9 @@ class Companies
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Department::class, orphanRemoval: true)]
     private Collection $departments;
 
+    #[ORM\OneToOne(mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private ?XeroIntegration $xeroIntegration = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -136,6 +139,23 @@ class Companies
                 $department->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getXeroIntegration(): ?XeroIntegration
+    {
+        return $this->xeroIntegration;
+    }
+
+    public function setXeroIntegration(XeroIntegration $xeroIntegration): static
+    {
+        // set the owning side of the relation if necessary
+        if ($xeroIntegration->getCompanyId() !== $this) {
+            $xeroIntegration->setCompanyId($this);
+        }
+
+        $this->xeroIntegration = $xeroIntegration;
 
         return $this;
     }
