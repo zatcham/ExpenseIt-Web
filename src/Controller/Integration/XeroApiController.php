@@ -4,8 +4,10 @@ namespace App\Controller\Integration;
 
 use App\Entity\Companies;
 use App\Entity\XeroIntegration;
+use App\Service\XeroPayroll;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Client;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use XeroAPI\XeroPHP\Api\IdentityApi;
+use XeroAPI\XeroPHP\Configuration;
 
 
 class XeroApiController extends AbstractController
@@ -22,8 +26,11 @@ class XeroApiController extends AbstractController
     private EntityManagerInterface $em;
     private string $clientId = 'B8ED81145C0244EAA49C63EBBB1F406A';
     private string $clientSecret = 'rMj1kO5tOC96sHrcf2o4XpcpWDFRaw2O1TUH43aCW9BUq7N9';
-    public function __construct(EntityManagerInterface $em) {
+
+    private XeroPayroll $xeroPayroll;
+    public function __construct(EntityManagerInterface $em, XeroPayroll $xeroPayroll) {
         $this->em = $em;
+        $this->xeroPayroll = $xeroPayroll;
     }
 
     // TODO : Error handling on faliure to auth
@@ -42,7 +49,7 @@ class XeroApiController extends AbstractController
         // There should be no code...  TODO : Check if exists
         if (!isset($_GET['code'])) {
             $options = [
-                'scope' => ['openid email profile offline_access accounting.transactions accounting.settings']
+                'scope' => ['openid email profile offline_access accounting.transactions accounting.settings payroll.employees']
             ];
             $authUrl = $provider->getAuthorizationUrl($options);
             $session->set('oauth2state', $provider->getState());
@@ -111,7 +118,7 @@ class XeroApiController extends AbstractController
             $this->addFlash('success', 'No xero connection found');
             return $this->json([
                 'status' => 'red'
-            ]);
+            ]); // TODO : How to handle from service as need bool
 //            return $this->redirectToRoute('integrate_home');
         }
 
@@ -122,7 +129,6 @@ class XeroApiController extends AbstractController
         if (!$this->isTokenExpired('access', $accessToken)) {
             return $this->json([
                 'status' => 'ok']);
-//            $this->addFlash('success', 'Access token is still valid');
         } else {
             // TODO
 //            if (!$this->isTokenExpired('refresh', $accessToken)) {
@@ -180,10 +186,45 @@ class XeroApiController extends AbstractController
         }
     }
 
+    #[Route('/connect/xero/tenant', name: 'integrate_xero_get-tenant')]
+    public function getTenant(Request $request) : Response {
+        $company = $this->getUser()->getCompany();
+        $accessToken = $company->getXeroIntegration()->getAccessToken();
+        if ($this->isTokenExpired('access', $accessToken)) {
+            $this->addFlash('success', 'Token expired');
+            return $this->redirectToRoute('integrate_home');
+        }
+        $config = Configuration::getDefaultConfiguration()->setAccessToken($accessToken);
+        $identityApi = new IdentityApi(
+            new Client(),
+            $config
+        );
+        $result = $identityApi->getConnections();
+        foreach($result as $data) {
+            $this->addFlash('success', $data);
+        }
+        $xero = $this->em->getRepository(XeroIntegration::class)->findOneBy(['company' => $company]);
+        $xero->setTenantId($result[0]->getTenantId());
+        $this->em->persist($xero);
+        $this->em->flush();
+        return $this->redirectToRoute('integrate_home');
+    }
+
     // No connection found -> Connect
     // Connection Found -> Check Token Validity ->
     // Access Expired -> Refresh -> Store both new tokens
     // If refresh expired -> Connect again
 
+    // Payroll api
+    #[Route('/connect/xero/employees', name: 'integrate_xero_get-employees')]
+    public function listEmployees(Request $request) {
+        $xero = $this->em->getRepository(XeroIntegration::class)->findOneBy(['company' => $this->getUser()->getCompany()]);
+        $this->xeroPayroll->setCredentials($xero->getAccessToken(), $xero->getTenantId());
+        $employees = $this->xeroPayroll->getEmployees();
+        $new = $this->xeroPayroll->syncXeroEmployees();
+//        return $this->json($employees);
+        return $this->json($new);
+
+    }
 
 }

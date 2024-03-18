@@ -28,6 +28,9 @@ class XeroIntegration
     #[ORM\JoinColumn(nullable: false)]
     private ?Companies $company = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $tenant_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,18 @@ class XeroIntegration
     public function setCompany(Companies $company): static
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    public function getTenantId(): ?string
+    {
+        return $this->tenant_id;
+    }
+
+    public function setTenantId(?string $tenant_id): static
+    {
+        $this->tenant_id = $tenant_id;
 
         return $this;
     }
