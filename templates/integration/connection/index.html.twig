@@ -18,14 +18,46 @@
         background-color: #d4edda;
         border-color: #c3e6cb;
     }
+    .status-dot {
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        display: inline-block;
+        animation: flash 1s infinite;
+    }
+    @keyframes flash {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .status-dot .status-tooltip {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        position: absolute;
+        z-index: 1;
+    }
+    .status-dot:hover .status-tooltip {
+        visibility: visible;
+        animation: none;
+    }
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Integration Connections ✅</h1>
 
     {% for message in app.flashes('success') %}
         <div class="alert alert-success" role="alert">{{ message }}</div>
     {% endfor %}
+
+    Xero Status <div id="xero-status-dot" class="status-dot">●
+        <span class="status-tooltip" id="xero-status-tip">Text</span>
+    </div>
+    <br>
 
     <a href="{{ path('integrate_xero_connect') }}">Connect to Xero </a>
     <br>
@@ -33,4 +65,37 @@
     <br>
     <a href="{{ path('integrate_xero_token') }}">Get new Xero token</a>
 </div>
+
+    <script>
+        function checkXeroStatus() {
+            fetch('{{ path('integrate_xero_status') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const dot = document.getElementById('xero-status-dot');
+                    const tooltip = document.getElementById('xero-status-tip')
+                    console.log('Got Xero Status ' + data.status);
+                    switch (data.status) {
+                        case 'ok':
+                            dot.style.color = 'green';
+                            tooltip.innerHTML = 'Connected to Xero';
+                            break;
+                        case 'refresh':
+                            dot.style.color = 'orange';
+                            tooltip.innerHTML = 'Refresh Pending';
+                            break;
+                        case 'red':
+                            dot.style.color = 'red';
+                            dot.title = 'No Connection';
+                            break;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        window.onload = function() {
+            console.log('page load');
+            checkXeroStatus();
+        }
+
+        setInterval(checkXeroStatus, 30000);
+    </script>
 {% endblock %}

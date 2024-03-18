@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\GenericProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class XeroApiController extends AbstractController
 {
     private EntityManagerInterface $em;
+    private string $clientId = 'B8ED81145C0244EAA49C63EBBB1F406A';
+    private string $clientSecret = 'rMj1kO5tOC96sHrcf2o4XpcpWDFRaw2O1TUH43aCW9BUq7N9';
     public function __construct(EntityManagerInterface $em) {
         $this->em = $em;
     }
@@ -26,21 +29,17 @@ class XeroApiController extends AbstractController
     // TODO : Error handling on faliure to auth
     #[Route('/connect/xero', name: 'integrate_xero_connect')]
     public function connectToXero(Request $request) : RedirectResponse {
-        $clientId = 'B8ED81145C0244EAA49C63EBBB1F406A';
-        $clientSecret = 'rMj1kO5tOC96sHrcf2o4XpcpWDFRaw2O1TUH43aCW9BUq7N9';
         $provider = new GenericProvider([
-            'clientId' => $clientId,
-            'clientSecret' => $clientSecret,
-            'redirectUri' => 'https://localhost:8000/connect/xero/callback',
+            'clientId' => $this->clientId,
+            'clientSecret' => $this->clientSecret,
+            'redirectUri' => 'https://localhost:8000/connect/xero/callback', // Change callback before final
             'urlAuthorize' => 'https://login.xero.com/identity/connect/authorize',
             'urlAccessToken' => 'https://identity.xero.com/connect/token',
             'urlResourceOwnerDetails' => 'https://api.xero.com/api.xro/2.0/Organisation',
         ]);
 
         $session = $request->getSession();
-        $state = $request->query->get('state');
-        $code = $request->query->get('code');
-        // If no auth code set, get one
+        // There should be no code...  TODO : Check if exists
         if (!isset($_GET['code'])) {
             $options = [
                 'scope' => ['openid email profile offline_access accounting.transactions accounting.settings']
@@ -49,35 +48,16 @@ class XeroApiController extends AbstractController
             $session->set('oauth2state', $provider->getState());
             $session->set('test', 'test');
             return new RedirectResponse($authUrl);
-            // TODO : Remove below as done in next method
-        } elseif (empty($state) || ($state !== $session->get('oauth2state'))) {
-//            $session->remove('oauth2state');
-            if ($session->has('test')) {
-                exit ('has test');
-            }
-            exit('Invalid state <br> Code: ' . $code . ' <br> State: ' . $state . ' <br> Session: ' . $session->get('test'));
-        } else {
-            try {
-                // Try and get a token
-                $accessToken = $provider->getAccessToken('authorisation_code', [
-                    'code' => $code,
-                ]);
-                // We have a token to use
-                return new RedirectResponse($this->generateUrl('app_home'));
-            } catch (IdentityProviderException $e) {
-                exit ($e->getMessage());
-            }
         }
+        exit ('Something went wrong'); // TODO
     }
 
     #[Route('/connect/xero/callback', name:'integrate_xero_callback')]
     public function oauthCallback(Request $request) : Response
     {
-        $clientId = 'B8ED81145C0244EAA49C63EBBB1F406A';
-        $clientSecret = 'rMj1kO5tOC96sHrcf2o4XpcpWDFRaw2O1TUH43aCW9BUq7N9';
         $provider = new GenericProvider([
-            'clientId' => $clientId,    // The client ID assigned to you by Xero
-            'clientSecret' => $clientSecret, // The client secret assigned to you by Xero
+            'clientId' => $this->clientId,
+            'clientSecret' => $this->clientSecret,
             'redirectUri' => 'https://localhost:8000/connect/xero/callback',
             'urlAuthorize' => 'https://login.xero.com/identity/connect/authorize',
             'urlAccessToken' => 'https://identity.xero.com/connect/token',
@@ -85,26 +65,15 @@ class XeroApiController extends AbstractController
         ]);
 
         try {
-            // Try to get an access token using the authorization code grant.
+            // Try to get an access token
             $accessToken = $provider->getAccessToken('authorization_code', [
                 'code' => $request->query->get('code'),
-//                'refresh_token' => $request->query->get('refresh_token'),
-//                'tenant_id' => $request->query->get('')
             ]);
             $refreshToken = $accessToken->getRefreshToken();
 
             $userCompany = $this->getUser()->getCompany();
             $this->storeTokens($userCompany, $accessToken, $refreshToken);
 
-//            exit('Code' . $accessToken);
-
-            // We have an access token, which we may use in authenticated
-            // requests against the service provider's API.
-            // Store the token securely and redirect the user to your application's home page.
-            // $this->storeToken($accessToken); // Implement this method to securely store the token
-
-            $this->addFlash('success', $accessToken);
-            $this->addFlash('success', $refreshToken);
             return $this->redirectToRoute('integrate_home');
 
         } catch (IdentityProviderException $e) {
@@ -121,26 +90,29 @@ class XeroApiController extends AbstractController
             $xero->setAccessToken($accessToken);
             $xero->setRefreshToken($refreshToken);
         } else {
+            // Entity doesnt exist, make one
             $xero = new XeroIntegration();
             $xero->setCompany($company);
             $xero->setAccessToken($accessToken);
             $xero->setRefreshToken($refreshToken);
         }
-
         $xero->setLastUpdated(new \DateTimeImmutable());
         $this->em->persist($xero);
         $this->em->flush();
     }
 
     #[Route('/connect/xero/token-status', name:'integrate_xero_status')]
-    public function checkTokenStatus(Request $request) : Response {
+    public function checkTokenStatus(Request $request) : JsonResponse {
         $company = $this->getUser()->getCompany();
         $xero = $this->em->getRepository(XeroIntegration::class)->findOneBy(['company' => $company]);
         // TODO : Change from em
         // Check entity exists
         if (!$xero) {
-            $this->addFlash('success', 'No xero tokens stored');
-            return $this->redirectToRoute('integrate_home');
+            $this->addFlash('success', 'No xero connection found');
+            return $this->json([
+                'status' => 'red'
+            ]);
+//            return $this->redirectToRoute('integrate_home');
         }
 
         // Get company token
@@ -148,17 +120,19 @@ class XeroApiController extends AbstractController
 //        $refreshToken = $xero->getRefreshToken();
 
         if (!$this->isTokenExpired('access', $accessToken)) {
-            $this->addFlash('success', 'Access token is still valid');
+            return $this->json([
+                'status' => 'ok']);
+//            $this->addFlash('success', 'Access token is still valid');
         } else {
-            $this->addFlash('success', 'Access token is invalid');
+            // TODO
+//            if (!$this->isTokenExpired('refresh', $accessToken)) {
+//                $this->addFlash('success', 'Refresh token is still valid');
+//            } else {
+//                $this->addFlash('success', 'Refresh token is invalid');
+//            }
+            return $this->json([
+                'status' => 'refresh']);
         }
-        if (!$this->isTokenExpired('refresh', $accessToken)) {
-            $this->addFlash('success', 'Refresh token is still valid');
-        } else {
-            $this->addFlash('success', 'Refresh token is invalid');
-        }
-
-        return $this->redirectToRoute('integrate_home');
     }
 
     // Returns false if not expired...
@@ -168,18 +142,16 @@ class XeroApiController extends AbstractController
         $currentTime = new \DateTimeImmutable();
         $tokenIssueTime = (new \DateTimeImmutable())->setTimestamp($decodedToken['nbf']);
         $tokenExpiryTime = $tokenIssueTime->modify('+' . $expiryTime . ' seconds');
-        $this->addFlash('success', ucfirst($tokenType) . ' Token expires in ' . $tokenExpiryTime->format('Y-m-d H:i:s'));
+//        $this->addFlash('success', ucfirst($tokenType) . ' Token expires in ' . $tokenExpiryTime->format('Y-m-d H:i:s'));
         //        return $currentTime;
         return $currentTime > $tokenExpiryTime;
     }
 
     #[Route('/connect/xero/token', name: 'integrate_xero_token')]
     public function getNewToken(Request $request) : RedirectResponse {
-        $clientId = 'B8ED81145C0244EAA49C63EBBB1F406A';
-        $clientSecret = 'rMj1kO5tOC96sHrcf2o4XpcpWDFRaw2O1TUH43aCW9BUq7N9';
         $provider = new GenericProvider([
-            'clientId' => $clientId,    // The client ID assigned to you by Xero
-            'clientSecret' => $clientSecret, // The client secret assigned to you by Xero
+            'clientId' => $this->clientId,
+            'clientSecret' => $this->clientSecret,
             'redirectUri' => 'https://localhost:8000/connect/xero/callback',
             'urlAuthorize' => 'https://login.xero.com/identity/connect/authorize',
             'urlAccessToken' => 'https://identity.xero.com/connect/token',
