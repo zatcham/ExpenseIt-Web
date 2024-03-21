@@ -9,6 +9,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use App\Entity\User;
 
@@ -26,7 +27,7 @@ class UserUpdateListener
 
 //        if ($user->getEmail() !== $original['email'] || $user->getFirstname() !== $original['firstname']) {
             $email = (new TemplatedEmail())
-            ->from('app@expenseit.tech','ExpenseIt')
+            ->from(new Address('app@expenseit.tech', 'ExpenseIt'))
             ->to($user->getEmail())
             ->subject('Your ExpenseIt Account')
             ->htmlTemplate('emails/notify_req_update.html.twig')
