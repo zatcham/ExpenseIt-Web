@@ -36,6 +36,8 @@ class ApprovalController extends AbstractController
     public function changeStatus(Request $request, string $id, string $status, EntityManagerInterface $entityManager) : Response {
         $user = $this->getUser();
         $statuses = ['pending', 'refusal', 'accepted', 'note', 'warning']; // List of allowed stati
+        $data = json_decode($request->getContent(), true);
+
         if (!$user) {
             throw $this->createAccessDeniedException('User not authenticated');
         } elseif (!$this->isGranted('ROLE_APPROVAL_RW')) {
@@ -51,12 +53,16 @@ class ApprovalController extends AbstractController
             throw $this->createNotFoundException('Status type is invalid');
         }
 
+        if (isset($data['comments'])) {
+            $request->setComment($data['comments']);
+        }
+
         $request->setStatus($status);
         $entityManager->persist($request);
         $entityManager->flush();
 //        Now done in JS
 //        $this->addFlash('success', 'Successfully changed approval status to ' . ucfirst($status));
-        return new JsonResponse(['status' => 'success', 'id' => $id, 'new_status' => $status, 'old_status' => $currentStatus]);
+        return new JsonResponse(['status' => 'success', 'id' => $id, 'new_status' => $status, 'old_status' => $currentStatus, 'comments' => $data['comments']]);
     }
 
     /**

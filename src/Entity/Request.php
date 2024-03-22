@@ -45,6 +45,9 @@ class Request
     #[ORM\OneToMany(mappedBy: 'relation', targetEntity: Receipt::class)]
     private Collection $receipts;
 
+    #[ORM\Column(length: 300, nullable: true)]
+    private ?string $comment = null;
+
     public function __construct()
     {
         $this->receipts = new ArrayCollection();
@@ -167,6 +170,14 @@ class Request
         }
 
         return $this;
+    }
+
+    public function getComment() : String {
+        return $this->comment;
+    }
+
+    public function setComment(String $comment) : void {
+        $this->comment = $comment;
     }
 
 }
