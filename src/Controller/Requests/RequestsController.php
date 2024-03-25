@@ -28,6 +28,7 @@ class RequestsController extends AbstractController
         $this->denyAccessUnlessGranted('view_request', $req);
         return $this->render('dashboard/requests/detail.html.twig', [
             'request' => $req,
+            'comments' => $req->getApprovalComments(),
         ]);
 
     }

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Requests;
 
+use App\Entity\ApprovalComments;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,7 +55,13 @@ class ApprovalController extends AbstractController
         }
 
         if (isset($data['comments'])) {
-            $request->setComment($data['comments']);
+            $comment = new ApprovalComments();
+            $comment->setComment($data['comments']);
+            $comment->setRequest($request);
+            $comment->setUser($user);
+            $comment->setTimestamp(new \DateTimeImmutable());
+//            $request->setComment($data['comments']);
+            $entityManager->persist($comment);
         }
 
         $request->setStatus($status);

@@ -103,7 +103,14 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <span class="input-group-text">Comments </span>
-                                    <textarea class="form-control ml-2" aria-label="With textarea" id="ta-comments">{{ request.comment }}</textarea>
+                                    <textarea class="form-control ml-2" aria-label="With textarea" id="ta-comments"></textarea>
+                                    <ul>
+                                    {% for comment in request.approvalComments %}
+                                        <li>User: {{ comment.user.firstname }} {{ comment.user.lastname }}</li>
+                                        <li>Comment: {{ comment.comment }}</li>
+                                        <li>Timestamp: {{ comment.timestamp|date('Y-m-d H:i:s') }}</li>
+                                    {% endfor %}
+                                    </ul>
                                 </div>
                             </div>
                         </li>
