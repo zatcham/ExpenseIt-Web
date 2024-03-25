@@ -102,11 +102,15 @@ class ApprovalController extends AbstractController
             return new JsonResponse(['status' => 'no-change', 'message' => 'Budget not changed'], 304);
         }
 
+        // Make sure budget is in the request's department // TODO : Is this right?
+        if ($budgetEnt->getDepartment() !== $requestEnt->getDepartment()) {
+            return new JsonResponse(['status' => 'no-change', 'message' => 'Budget is not in request\'s department'], 400);
+        }
+
         $requestEnt->setBudget($budgetEnt);
         $entityManager->persist($requestEnt);
         $entityManager->flush();
-
-        return new JsonResponse(['status' => 'success'], 200);
+        return new JsonResponse(['status' => 'success', 'budget' => $budgetEnt->getName()], 200);
     }
 
     /**

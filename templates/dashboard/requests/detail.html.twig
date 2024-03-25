@@ -102,8 +102,20 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-text">Comments </span>
+{#                                <div class="input-group">#}
+{#                                    <span class="input-group-text">Change budget </span>#}
+                                    <label for="sel-budget">Change budget</label> {# TODO : Change this to a modal with more info? #}
+                                    <select id="sel-budget" class="form-control">
+                                        {% for budget in request.department.budgets %}
+                                        <option value="{{ budget.id }}" {% if budget.id == request.budget.id %}selected{% endif %}>{{ budget.name }}</option>
+                                        {% endfor %}
+                                    </select>
+{#                                </div>#}
+                            </div>
+                            <div class="form-group">
+{#                                <div class="input-group">#}
+{#                                    <span class="input-group-text">Comments </span>#}
+                                <label for="ta-comments">Comments</label>
                                     <textarea class="form-control ml-2" aria-label="With textarea" id="ta-comments"></textarea>
                                     <ul>
                                     {% for comment in request.approvalComments %}
@@ -112,7 +124,7 @@
                                         <li>Timestamp: {{ comment.timestamp|date('Y-m-d H:i:s') }}</li>
                                     {% endfor %}
                                     </ul>
-                                </div>
+{#                                </div>#}
                             </div>
                         </li>
                         </ul>
@@ -129,17 +141,13 @@
                         <div class="card-body p-3">
                             <ul class="list-group">
                                 <li class="list-group-item border-0 justify-content-between ps-0 pb-0 border-radius-lg">
-                                    <div class="d-flex">
                                         {% for reciept in request.receipts %}
-                                            <img class="dropdown-image img-thumbnail" src="{{ reciept.image }}">
+                                            <img class="img-thumbnail" src="{{ reciept.image }}" alt="">
                                         {% endfor %}
-                                    </div>
                                 </li>
                             </ul>
                         </div>
                     </div>
-
-
             </div>
         </div>
     </div>
@@ -149,6 +157,7 @@
 {% block js %}
     <script>
         $(document).ready(function() {
+            // Approval - Status change
             // Buttons all in status-set class
             $('.approval-status-set').click(function(e) {
                 e.preventDefault();
@@ -159,7 +168,8 @@
                 var data = {
                   comments: $('#ta-comments').val()
                 };
-                // let comments = $('#ta-comments').val();
+
+                // Approval - Add comment
                 // Do ajax
                 $.ajax({
                     url: '/approve/status/' + id + '/' + status,
@@ -168,14 +178,11 @@
                     contentType: "application/json; charset=utf-8",
                     success: function(response) {
                         if (response.status) {
-                            // $(e.target).prop('checked', response.status);
-                            showFlash(status);
-                            console.log(response);
+                            showFlash('status', status);
                             // console.log(data);
                             console.log('Status: ' + status + ' enabled succesfully with comment: ' + data.comments);
                         } else {
-                            // $(e.target).prop('checked', response.status); // TODO Show
-                            console.log('Status: ' + status + ' disable succesfully');
+                            console.log('Error changing status');
                         }
                     },
                     error: function(xhr) {
@@ -184,11 +191,34 @@
                     }
                 });
             });
+
+            $('#sel-budget').change(function () {
+                console.log("Budget input changed");
+                const budgetId = $(this).val();
+                const requestId = {{ app.request.get('id') }};
+                $.ajax({
+                    url: '/approve/change-budget/' + requestId + '/' + budgetId,
+                    type: 'GET',
+                    success: function(response) {
+                        let message = 'Budget changed to ' + response.budget + ' successfully';
+                        showFlash('budget', message);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
         });
 
-        function showFlash(status) {
-            status = status.charAt(0).toUpperCase() + status.slice(1);
-            let message = 'Successfully changed status to ' + status;
+        function showFlash(type, text) {
+            let message = '';
+            if (type === 'status') {
+                text = text.charAt(0).toUpperCase() + text.slice(1);
+                message = 'Successfully changed status to ' + text;
+            } else if (type === 'budget') {
+                message = text;
+            }
+
             $('#ajax-flash').text(message).fadeIn('slow');
             setTimeout(function() { $('#ajax-flash').fadeOut('slow'); }, 3000);
         }
