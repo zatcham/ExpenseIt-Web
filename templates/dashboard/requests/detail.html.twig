@@ -64,7 +64,8 @@
                                             Department: {% if request.department is not null %}{{ request.department.name }}{% else %}N/A{% endif %}
                                         </li>
                                         <li>
-                                            Budget: Budget 1
+                                            {% set budgetName = request.budget.name|default('None assigned') %}
+                                            Budget: {{ budgetName }}
                                             Remaining funds: £500
                                         </li>
                                     </ul>

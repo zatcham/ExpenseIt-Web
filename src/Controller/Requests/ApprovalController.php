@@ -3,6 +3,7 @@
 namespace App\Controller\Requests;
 
 use App\Entity\ApprovalComments;
+use App\Entity\Budget;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,7 +70,43 @@ class ApprovalController extends AbstractController
         $entityManager->flush();
 //        Now done in JS
 //        $this->addFlash('success', 'Successfully changed approval status to ' . ucfirst($status));
-        return new JsonResponse(['status' => 'success', 'id' => $id, 'new_status' => $status, 'old_status' => $currentStatus, 'comments' => $data['comments']]);
+        return new JsonResponse(['status' => 'success', 'id' => $id, 'new_status' => $status, 'old_status' => $currentStatus, 'comments' => $data['comments']],
+        200);
+    }
+
+    // Change budget via Ajax, if budget is not set, assume department's budget
+    #[Route('/approve/change-budget/{id}/{budget}', name: 'approve_change_budget')]
+    public function changeBudget(Request $request, string $id, string $budget, EntityManagerInterface $entityManager) : Response {
+        $user = $this->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException('User not authenticated');
+        } elseif (!$this->isGranted('ROLE_APPROVAL_RW')) {
+            throw $this->createAccessDeniedException('Invalid permissions');
+        } // TODO : Permission testing
+
+        // Qualifier used due to import of HttpFoundation\Request
+        $requestEnt = $entityManager->getRepository(\App\Entity\Request::class)->find($id);
+        if (!$requestEnt) {
+//            TODO : Change this from throw to JsonResponse
+            throw $this->createNotFoundException('Request not found with id' . $id);
+        }
+
+        $budgetEnt = $entityManager->getRepository(Budget::class)->find($budget);
+        if (!$budgetEnt) {
+            throw $this->createNotFoundException('Budget not found with id' . $budget);
+        }
+
+        // Check if we are actually changing it, let the user know if not
+        // TODO : is this working?
+        if ($budgetEnt == $requestEnt->getBudget()) {
+            return new JsonResponse(['status' => 'no-change', 'message' => 'Budget not changed'], 304);
+        }
+
+        $requestEnt->setBudget($budgetEnt);
+        $entityManager->persist($requestEnt);
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'success'], 200);
     }
 
     /**
