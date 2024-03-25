@@ -45,9 +45,16 @@ class Request
     #[ORM\OneToMany(mappedBy: 'relation', targetEntity: Receipt::class)]
     private Collection $receipts;
 
+    #[ORM\Column(length: 300, nullable: true)]
+    private ?string $comment = null;
+
+    #[ORM\OneToMany(mappedBy: 'request', targetEntity: ApprovalComments::class, orphanRemoval: true)]
+    private Collection $approvalComments;
+
     public function __construct()
     {
         $this->receipts = new ArrayCollection();
+        $this->approvalComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -163,6 +170,44 @@ class Request
             // set the owning side to null (unless already changed)
             if ($receipt->getRelation() === $this) {
                 $receipt->setRelation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getComment() : String {
+        return $this->comment;
+    }
+
+    public function setComment(String $comment) : void {
+        $this->comment = $comment;
+    }
+
+    /**
+     * @return Collection<int, ApprovalComments>
+     */
+    public function getApprovalComments(): Collection
+    {
+        return $this->approvalComments;
+    }
+
+    public function addApprovalComment(ApprovalComments $approvalComment): static
+    {
+        if (!$this->approvalComments->contains($approvalComment)) {
+            $this->approvalComments->add($approvalComment);
+            $approvalComment->setRequest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApprovalComment(ApprovalComments $approvalComment): static
+    {
+        if ($this->approvalComments->removeElement($approvalComment)) {
+            // set the owning side to null (unless already changed)
+            if ($approvalComment->getRequest() === $this) {
+                $approvalComment->setRequest(null);
             }
         }
 

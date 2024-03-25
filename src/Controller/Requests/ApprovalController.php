@@ -2,6 +2,7 @@
 
 namespace App\Controller\Requests;
 
+use App\Entity\ApprovalComments;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,6 +37,8 @@ class ApprovalController extends AbstractController
     public function changeStatus(Request $request, string $id, string $status, EntityManagerInterface $entityManager) : Response {
         $user = $this->getUser();
         $statuses = ['pending', 'refusal', 'accepted', 'note', 'warning']; // List of allowed stati
+        $data = json_decode($request->getContent(), true);
+
         if (!$user) {
             throw $this->createAccessDeniedException('User not authenticated');
         } elseif (!$this->isGranted('ROLE_APPROVAL_RW')) {
@@ -51,12 +54,22 @@ class ApprovalController extends AbstractController
             throw $this->createNotFoundException('Status type is invalid');
         }
 
+        if (isset($data['comments'])) {
+            $comment = new ApprovalComments();
+            $comment->setComment($data['comments']);
+            $comment->setRequest($request);
+            $comment->setUser($user);
+            $comment->setTimestamp(new \DateTimeImmutable());
+//            $request->setComment($data['comments']);
+            $entityManager->persist($comment);
+        }
+
         $request->setStatus($status);
         $entityManager->persist($request);
         $entityManager->flush();
 //        Now done in JS
 //        $this->addFlash('success', 'Successfully changed approval status to ' . ucfirst($status));
-        return new JsonResponse(['status' => 'success', 'id' => $id, 'new_status' => $status, 'old_status' => $currentStatus]);
+        return new JsonResponse(['status' => 'success', 'id' => $id, 'new_status' => $status, 'old_status' => $currentStatus, 'comments' => $data['comments']]);
     }
 
     /**
