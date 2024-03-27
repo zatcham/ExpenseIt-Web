@@ -101,17 +101,20 @@
                                     </a>
                                 </div>
                             </div>
+                            {% if request.department.budgets is not null %}
                             <div class="form-group">
 {#                                <div class="input-group">#}
 {#                                    <span class="input-group-text">Change budget </span>#}
                                     <label for="sel-budget">Change budget</label> {# TODO : Change this to a modal with more info? #}
                                     <select id="sel-budget" class="form-control">
+                                        <option selected disabled value>Select a budget: </option>
                                         {% for budget in request.department.budgets %}
-                                        <option value="{{ budget.id }}" {% if budget.id == request.budget.id %}selected{% endif %}>{{ budget.name }}</option>
+                                        <option value="{{ budget.id }}">{{ budget.name }}</option>
                                         {% endfor %}
                                     </select>
 {#                                </div>#}
                             </div>
+                            {% endif %}
                             <div class="form-group">
 {#                                <div class="input-group">#}
 {#                                    <span class="input-group-text">Comments </span>#}
@@ -199,9 +202,19 @@
                 $.ajax({
                     url: '/approve/change-budget/' + requestId + '/' + budgetId,
                     type: 'GET',
-                    success: function(response) {
-                        let message = 'Budget changed to ' + response.budget + ' successfully';
-                        showFlash('budget', message);
+                    statusCode: {
+                        304: function (xhr) {
+                            console.log('304');
+                        }
+                    },
+                    success: function(response, xhr) {
+                        console.log(xhr.status);
+                        if (response.budget) { // TODO : Fix this
+                            let message = 'Budget changed to ' + response.budget + ' successfully';
+                            showFlash('budget', message);
+                        } else {
+                            showFlash('budget', 'Budget already set');
+                        }
                     },
                     error: function(error) {
                         console.log(error);
