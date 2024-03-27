@@ -51,6 +51,9 @@ class Request
     #[ORM\OneToMany(mappedBy: 'request', targetEntity: ApprovalComments::class, orphanRemoval: true)]
     private Collection $approvalComments;
 
+    #[ORM\ManyToOne]
+    private ?Budget $budget = null;
+
     public function __construct()
     {
         $this->receipts = new ArrayCollection();
@@ -210,6 +213,18 @@ class Request
                 $approvalComment->setRequest(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBudget(): ?Budget
+    {
+        return $this->budget;
+    }
+
+    public function setBudget(?Budget $budget): static
+    {
+        $this->budget = $budget;
 
         return $this;
     }
