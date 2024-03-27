@@ -33,6 +33,9 @@ class Companies
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Department::class, orphanRemoval: true)]
     private Collection $departments;
 
+    #[ORM\ManyToOne]
+    private ?Plan $plan = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -136,6 +139,18 @@ class Companies
                 $department->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlan(): ?Plan
+    {
+        return $this->plan;
+    }
+
+    public function setPlan(?Plan $plan): static
+    {
+        $this->plan = $plan;
 
         return $this;
     }
