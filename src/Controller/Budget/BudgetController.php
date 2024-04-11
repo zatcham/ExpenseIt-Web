@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -86,6 +87,31 @@ class BudgetController extends AbstractController
         $response = new BinaryFileResponse($filePath);
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $safeFilename);
         return $response;
+    }
+
+    // Handle changes from Ajax
+    #[Route('/budget/update/{id}/{type}', name: 'budget_update')]
+    public function update(Request $request, string $id, string $type, EntityManagerInterface $em) : Response {
+        $budget = $em->getRepository(Budget::class)->find($id);
+        $user = $this->getUser();
+        $allowedTypes = ['delete'];
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('User not authenticated');
+        } elseif (!$this->isGranted('ROLE_APPROVAL_RW')) {
+            throw $this->createAccessDeniedException('Invalid permissions');
+        }
+
+        if (!in_array($type, $allowedTypes)) {
+            return new JsonResponse(['status' => 'faliure', 'message' => 'Type not allowed'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($type = 'delete') {
+            $em->remove($budget);
+            $em->flush();
+            return new JsonResponse(['status' => 'success', 'message' => 'Deleted succesfully'], Response::HTTP_OK);
+        }
+        return new JsonResponse(['status' => 'error', 'message' => 'Not allowed'], Response::HTTP_FORBIDDEN);
     }
 
     private function getAllBudgets() : array {
